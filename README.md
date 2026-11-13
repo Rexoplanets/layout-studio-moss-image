@@ -7,6 +7,11 @@ Take the guesswork out of creating bounding-box layouts for [MOSS-Image](https:/
   <em>The Layout Studio for MOSS-Image</em>
 </p>
 
+### 🚀 **[Launch the Live Web Demo](https://your-username.github.io/your-repo/your-file.html)**
+*(No installation required — runs directly in your browser. Prefer offline use? Download the latest release from the [Releases](../../releases/latest) page.)*
+
+---
+
 ## Table of Contents
 - [Overview](#overview)
 - [Who needs a layout builder for MOSS-Image?](#who-needs-a-layout-builder-for-moss-image)
