@@ -1,0 +1,2447 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Layout Studio for MOSS-Image - by ℝ𝕖𝕩𝕠</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/webp" href="./assets/images/layout-studio-for-moss-rexo-logo.webp">
+    <!-- Local Scripts -->
+    <script src="./assets/js/tailwind.js"></script>
+    <script src="./assets/js/lucide.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        textarea { min-height: 120px; }
+
+        @media (max-width: 991px) {
+            header {
+                flex-direction: column !important;
+                gap: 1rem !important;
+            }
+            #sidebarCol {
+                width: 100% !important;
+                height: auto !important;
+            }
+            #workspaceContainer {
+                width: 100% !important;
+            }
+        }
+
+        @media (min-width: 992px) {
+            #sidebarCol {
+                height: 100% !important;
+            }
+            #workspaceContainer {
+                height: 100% !important;
+            }
+        }
+
+        /* Functional 16x16 grid background */
+        .bg-grid-pattern {
+            background-size: 16px 16px;
+            background-image:
+                linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        }
+
+        /* Dynamic UI Font Scale Rules */
+        .font-scale-0 { font-size: 100%; }
+        .font-scale-1 { font-size: 112.5%; }
+        .font-scale-2 { font-size: 125%; }
+
+        .font-scale-1 label,
+        .font-scale-1 p,
+        .font-scale-1 input,
+        .font-scale-1 textarea,
+        .font-scale-1 select,
+        .font-scale-1 button,
+        .font-scale-1 span:not(.canvas-box-label) {
+            font-size: 0.85rem !important;
+            line-height: 1.1rem !important;
+        }
+
+        .font-scale-2 label,
+        .font-scale-2 p,
+        .font-scale-2 input,
+        .font-scale-2 textarea,
+        .font-scale-2 select,
+        .font-scale-2 button,
+        .font-scale-2 span:not(.canvas-box-label) {
+            font-size: 1rem !important;
+            line-height: 1.2rem !important;
+        }
+
+        /* Enforce fixed font size on canvas bounding box text regardless of UI zoom */
+        .canvas-box-label {
+            font-size: 0.625rem !important;
+            line-height: 0.875rem !important;
+        }
+
+        /* Custom Outline Radio Buttons with Indigo Selected Dot & Border */
+        input[type="radio"].custom-radio {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 0.875rem;
+            height: 0.875rem;
+            border: 1px solid #1e293b; /* border-slate-800 */
+            border-radius: 9999px;
+            background-color: #020617; /* bg-slate-950 */
+            outline: none;
+            cursor: pointer;
+            position: relative;
+            display: inline-block;
+            vertical-align: middle;
+            transition: all 0.15s ease-in-out;
+        }
+
+        input[type="radio"].custom-radio:hover {
+            border-color: #334155; /* border-slate-700 */
+        }
+
+        input[type="radio"].custom-radio:checked {
+            border-color: #6366f1; /* indigo-500 */
+        }
+
+        input[type="radio"].custom-radio:checked::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 0.375rem;
+            height: 0.375rem;
+            border-radius: 9999px;
+            background-color: #6366f1; /* indigo-500 */
+        }
+    </style>
+</head>
+<body id="appBody" class="bg-slate-950 text-slate-100 h-full flex flex-col overflow-hidden selection:bg-indigo-500 selection:text-white font-scale-0">
+
+    <!-- Top Navigation Bar -->
+    <header class="bg-slate-900 border-b border-slate-800 px-6 py-3.5 flex items-center justify-between shrink-0 shadow-lg z-30">
+        <!-- Left: Logo & Title -->
+        <div class="flex items-center space-x-3">
+            <div class="flex items-center justify-center">
+                <img src="./assets/images/layout-studio-for-moss-rexo-logo.webp" alt="MOSS Logo" class="w-8 h-8" onerror="this.onerror=null; this.src='https://placehold.co/24x24/4f46e5/ffffff?text=MOSS'">
+            </div>
+            <div>
+                <h1 class="text-sm font-bold text-white tracking-wide flex items-center gap-2">
+                    The Layout Studio for MOSS-Image
+                    <span class="text-[0.625rem] px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-semibold">v1.0.0</span><span class="text-[0.625rem]">by ℝ𝕖𝕩𝕠</span>
+                </h1>
+                <p class="text-xs text-slate-400">Visual bounding box constructor for <a href="https://github.com/OpenMOSS/MOSS-Image/tree/main" target="_blank" rel="noopener noreferrer" class="text-amber-400 underline hover:text-amber-300">MOSS-Image</a></p>
+            </div>
+        </div>
+
+        <!-- Center: Add Bounding Box & Reference Image Controls -->
+        <div class="flex items-center gap-2">
+            <!-- Add Bounding Box Dropdown Button -->
+            <div class="relative flex items-center">
+                <button id="addBoxDropdownBtn" onclick="toggleAddBoxMenu()" title="Add a Text, Object, or Character Item" class="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg transition shadow-md shadow-indigo-600/20 flex items-center gap-1.5">
+                    <i data-lucide="plus" class="w-4 h-4"></i> Add Bounding Box <i data-lucide="chevron-down" class="w-3.5 h-3.5 ml-0.5"></i>
+                </button>
+                <div id="addBoxMenu" class="absolute left-1/2 -translate-x-1/2 top-full mt-1.5 w-48 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl py-1.5 hidden z-50">
+                    <button onclick="addNewBox('text')" class="w-full text-left px-4 py-2 text-xs font-medium text-slate-200 hover:bg-slate-800 hover:text-indigo-400 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-indigo-400"></span> Add Text
+                    </button>
+                    <button onclick="addNewBox('object')" class="w-full text-left px-4 py-2 text-xs font-medium text-slate-200 hover:bg-slate-800 hover:text-emerald-400 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Add an Object
+                    </button>
+                    <button onclick="addNewBox('character')" class="w-full text-left px-4 py-2 text-xs font-medium text-slate-200 hover:bg-slate-800 hover:text-amber-400 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-amber-400"></span> Add a Character
+                    </button>
+                </div>
+            </div>
+
+            <!-- Insert Reference Image Button -->
+            <button onclick="triggerReferenceImageSelect()" class="px-3 py-2 text-xs font-medium text-indigo-300 bg-indigo-950/60 hover:bg-indigo-900/60 border border-indigo-700/60 rounded-lg transition flex items-center gap-1.5" title="Insert reference background image">
+                <i data-lucide="image-plus" class="w-3.5 h-3.5 text-indigo-400"></i> + Reference Image
+            </button>
+            <input type="file" id="refFileInput" accept="image/*" onchange="handleReferenceImageUpload(event)" class="hidden">
+        </div>
+
+        <!-- Right: Action Controls -->
+        <div class="flex items-center gap-2.5 flex-wrap justify-center">
+            <!-- Undo and Redo Icon Buttons -->
+            <div class="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800">
+                <button id="undoBtn" onclick="undo()" disabled class="p-1.5 text-xs font-medium text-slate-400 hover:text-white disabled:opacity-30 disabled:hover:text-slate-400 rounded-md transition hover:bg-slate-800" title="Undo (Ctrl+Z)">
+                    <i data-lucide="undo-2" class="w-4 h-4"></i>
+                </button>
+                <button id="redoBtn" onclick="redo()" disabled class="p-1.5 text-xs font-medium text-slate-400 hover:text-white disabled:opacity-30 disabled:hover:text-slate-400 rounded-md transition hover:bg-slate-800" title="Redo (Ctrl+Y)">
+                    <i data-lucide="redo-2" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <!-- Snap to Grid Toggle -->
+            <button id="snapGridBtn" onclick="toggleSnapToGrid()" class="px-3 py-2 text-xs font-medium text-indigo-300 bg-indigo-950/60 hover:bg-indigo-900/60 border border-indigo-700/60 rounded-lg transition flex items-center gap-1.5" title="Toggle 16px Grid Snapping">
+                <i data-lucide="grid" class="w-3.5 h-3.5 text-indigo-400"></i> Snap Grid: <span id="snapGridLabel">ON</span>
+            </button>
+
+            <!-- Reset Button -->
+            <button id="resetBtn" onclick="resetAll()" title="Reset the Studio settings to default" class="px-3 py-2 text-xs font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition border border-slate-700 flex items-center gap-1.5">
+                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Reset
+            </button>
+
+            <!-- Import JSON Button -->
+            <button id="openImportModalBtn" onclick="openImportModal()" class="px-3 py-2 text-xs font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition border border-slate-700 flex items-center gap-1.5">
+                <i data-lucide="file-input" class="w-3.5 h-3.5"></i> Import JSON
+            </button>
+
+            <!-- Export Button -->
+            <button id="openExportModalBtn" onclick="openExportModal()" class="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg transition shadow-md shadow-indigo-600/20 flex items-center gap-1.5">
+                <i data-lucide="download" class="w-4 h-4"></i> Export
+            </button>
+
+            <!-- Text Zoom A- / A+ Controls -->
+            <div class="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800">
+                <button id="zoomOutTextBtn" onclick="zoomTextOut()" disabled class="px-2 py-1 text-xs font-bold text-slate-400 hover:text-white disabled:opacity-30 disabled:hover:text-slate-400 rounded transition hover:bg-slate-800" title="Decrease Text Size">
+                    A<sup>-</sup>
+                </button>
+                <button id="zoomInTextBtn" onclick="zoomTextIn()" class="px-2 py-1 text-xs font-bold text-slate-400 hover:text-white rounded transition hover:bg-slate-800" title="Increase Text Size">
+                    A<sup>+</sup>
+                </button>
+            </div>
+
+            <!-- Help Button -->
+            <button onclick="openHelpModal()" class="p-2 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition border border-slate-700 flex items-center justify-center" title="Keyboard Shortcuts & Help">
+                <i data-lucide="help-circle" class="w-4 h-4"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Workspace Area -->
+    <div id="mainLayoutContainer" class="flex-1 flex flex-col min-[992px]:flex-row overflow-y-auto min-[992px]:overflow-hidden custom-scrollbar">
+
+        <!-- Center Workspace & Auto-Scaling Fluid Canvas (First in order for stacked <992px view) -->
+        <main id="workspaceContainer" class="w-full min-[992px]:flex-1 flex flex-col bg-slate-950 overflow-hidden relative min-h-[350px] order-1 min-[992px]:order-2">
+            <!-- Canvas Workspace Header Bar -->
+            <div class="px-6 py-2.5 bg-slate-900/40 border-b border-slate-800/80 flex items-center justify-between text-xs text-slate-400 shrink-0 z-10">
+                <div class="flex items-center gap-4">
+                    <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-indigo-500 inline-block"></span> Text Items</span>
+                    <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span> Object Items</span>
+                    <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span> Character Items</span>
+                </div>
+
+                <!-- Reference Image Controls & Aspect Indicator -->
+                <div class="flex items-center gap-3">
+                    <div id="refImgToolbar" class="hidden items-center gap-2 pr-3 border-r border-slate-800">
+                        <span class="text-[0.625rem] text-slate-400 font-medium">Ref Image Opacity:</span>
+                        <input type="range" id="refOpacityRange" min="10" max="100" value="50" oninput="updateRefOpacity(this.value)" class="w-16 h-1 bg-slate-700 rounded appearance-none cursor-pointer">
+                        <button onclick="clearReferenceImage()" class="text-slate-500 hover:text-red-400 p-0.5 transition" title="Remove reference image">
+                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                    <span id="canvasAspectLabel" class="font-mono text-slate-300">1024 × 1024 px</span>
+                </div>
+            </div>
+
+            <!-- Canvas Viewport Wrapper with 20px padding constraint -->
+            <div class="flex-1 p-5 overflow-hidden flex items-center justify-center relative shrink-0" id="viewportArea" onclick="handleViewportClick(event)">
+
+                <!-- Dynamically Scaled Canvas Wrapper -->
+                <div id="canvasWrapper" onclick="handleCanvasWrapperClick(event)" class="relative bg-slate-900/90 border-2 border-slate-700/60 shadow-2xl overflow-hidden flex items-center justify-center transition-all duration-75 bg-grid-pattern z-10" style="width: 500px; height: 500px;">
+
+                    <!-- Canvas-Contained Reference Background Image (Reverted back to canvas bounds) -->
+                    <img id="refBgImage" class="absolute inset-0 w-full h-full object-contain pointer-events-none z-0 hidden opacity-50 transition-opacity">
+
+                    <!-- Dynamic Center Crosshair Alignment Guides -->
+                    <div id="guideH" class="absolute top-1/2 left-0 right-0 h-[1px] bg-red-500/40 pointer-events-none z-0 transition-colors"></div>
+                    <div id="guideV" class="absolute left-1/2 top-0 bottom-0 w-[1px] bg-red-500/40 pointer-events-none z-0 transition-colors"></div>
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-red-500/50 pointer-events-none z-0"></div>
+
+                    <!-- Bounding Box Elements Layer -->
+                    <div id="boxesLayer" class="absolute inset-0 z-10 pointer-events-none"></div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Horizontal Resizer Handle for Workspace Height (<992px Stacked View) -->
+        <div id="workspaceResizerH" class="block min-[992px]:hidden h-2.5 bg-slate-900 hover:bg-indigo-500/50 border-y border-slate-800 cursor-row-resize shrink-0 transition-colors z-20 order-2 flex items-center justify-center">
+            <div class="w-8 h-1 bg-slate-700 rounded-full"></div>
+        </div>
+
+        <!-- Vertical Resizer Handle (Desktop ≥992px) -->
+        <div id="resizer" class="hidden min-[992px]:block w-1.5 bg-slate-950 hover:bg-indigo-500/50 cursor-col-resize shrink-0 transition-colors z-20 order-3"></div>
+
+        <!-- Single Left Sidebar Column (With 2 Tabs) -->
+        <aside id="sidebarCol" class="w-full min-[992px]:w-96 bg-slate-900 border-t min-[992px]:border-t-0 min-[992px]:border-r border-slate-800 flex flex-col shrink-0 z-10 shadow-xl overflow-hidden relative order-4 min-[992px]:order-1">
+
+            <!-- Sidebar Tab Navigation Header -->
+            <div class="flex border-b border-slate-800 bg-slate-950 shrink-0">
+                <button id="tabBtn1" onclick="switchTab(1)" class="flex-1 py-3 px-3 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 border-b-2 border-indigo-500 text-indigo-400 bg-slate-900/80 transition">
+                    <i data-lucide="sliders" class="w-3.5 h-3.5"></i> Summary & Settings
+                </button>
+                <button id="tabBtn2" onclick="switchTab(2)" class="flex-1 py-3 px-3 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition">
+                    <i data-lucide="layers" class="w-3.5 h-3.5 text-emerald-400"></i> Items (<span id="boxCount" class="text-indigo-400">0</span>)
+                </button>
+            </div>
+
+            <!-- Tab 1 Body: Summary & Settings -->
+            <div id="tabContent1" class="flex flex-col flex-1 overflow-y-auto custom-scrollbar min-h-0">
+                <div class="p-4 border-b border-slate-800 bg-slate-900/50 space-y-3">
+                    <div>
+                        <label class="block text-[0.6875rem] font-semibold text-slate-300 mb-1">Global Scene Summary</label>
+                        <textarea id="sceneSummary" oninput="handleUserInput()" placeholder="e.g. A vintage screen-printed poster of Kyoto at dusk with an orange sky..." class="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-3 py-2 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition"></textarea>
+                    </div>
+                </div>
+
+                <!-- Canvas Configuration -->
+                <div class="p-4 border-b border-slate-800 bg-slate-900/30 space-y-3">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Canvas Width (px)</label>
+                            <input type="number" id="canvasWidth" value="1024" step="16" min="128" max="4096" oninput="handleManualDimensionInput()" onchange="validateCanvasSize(); updateCanvasDimensions(); pushState();" class="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Canvas Height (px)</label>
+                            <input type="number" id="canvasHeight" value="1024" step="16" min="128" max="4096" oninput="handleManualDimensionInput()" onchange="validateCanvasSize(); updateCanvasDimensions(); pushState();" class="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
+                        </div>
+                    </div>
+
+                    <!-- Enforced Dimensions Notice -->
+                    <div class="text-[0.5625rem] text-amber-400/90 flex items-center gap-1 pt-0.5">
+                        <i data-lucide="info" class="w-3 h-3 shrink-0"></i> Dimensions are automatically enforced to multiples of 16. Be sure to generate using these exact dimensions.
+                    </div>
+
+                    <!-- Presets vs Custom Mode Radio Buttons -->
+                    <div class="flex items-center gap-6 pt-2 border-t border-slate-800/60">
+                        <label class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-300 cursor-pointer">
+                            <input type="radio" name="sizeMode" value="presets" checked onchange="handleSizeModeChange('presets')" class="custom-radio">
+                            Presets
+                        </label>
+                        <label class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-300 cursor-pointer">
+                            <input type="radio" name="sizeMode" value="custom" onchange="handleSizeModeChange('custom')" class="custom-radio">
+                            Custom
+                        </label>
+                    </div>
+
+                    <!-- Presets Toggle Panel -->
+                    <div id="presetsPanel" class="space-y-3 pt-2">
+                        <!-- Category Selection Radios -->
+                        <div class="flex items-center gap-4 bg-slate-950 p-2 rounded-lg border border-slate-800/80">
+                            <label class="inline-flex items-center gap-1.5 text-[0.6875rem] font-medium text-slate-300 cursor-pointer">
+                                <input type="radio" name="presetCat" value="square" checked onchange="handlePresetCatChange('square')" class="custom-radio">
+                                Square
+                            </label>
+                            <label class="inline-flex items-center gap-1.5 text-[0.6875rem] font-medium text-slate-300 cursor-pointer">
+                                <input type="radio" name="presetCat" value="portrait" onchange="handlePresetCatChange('portrait')" class="custom-radio">
+                                Portrait
+                            </label>
+                            <label class="inline-flex items-center gap-1.5 text-[0.6875rem] font-medium text-slate-300 cursor-pointer">
+                                <input type="radio" name="presetCat" value="landscape" onchange="handlePresetCatChange('landscape')" class="custom-radio">
+                                Landscape
+                            </label>
+                        </div>
+
+                        <!-- 3-Column Dynamic Presets Layout -->
+                        <div class="grid grid-cols-3 gap-2 items-start">
+                            <!-- Col 1: Aspect Buttons (Primary) -->
+                            <div id="aspectCol1" class="flex flex-col gap-1.5"></div>
+
+                            <!-- Col 2: Aspect Buttons (Secondary) -->
+                            <div id="aspectCol2" class="flex flex-col gap-1.5"></div>
+
+                            <!-- Col 3: Megapixel Selector & Actual MP Indicator -->
+                            <div class="flex flex-col gap-1">
+                                <select id="targetMpSelect" onchange="handleMpChange(this.value)" class="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-2 py-1 text-[0.6875rem] text-slate-200 focus:outline-none focus:border-indigo-500">
+                                    <option value="1.00" selected>~1 MP</option>
+                                    <option value="1.25">~1.25 MP</option>
+                                    <option value="1.50">~1.5 MP</option>
+                                    <option value="1.75">~1.75 MP</option>
+                                    <option value="2.00">~2 MP</option>
+                                    <option value="2.25">~2.25 MP</option>
+                                    <option value="2.50">~2.5 MP</option>
+                                    <option value="2.75">~2.75 MP</option>
+                                    <option value="3.00">~3 MP</option>
+                                    <option value="3.25">~3.25 MP</option>
+                                    <option value="3.50">~3.5 MP</option>
+                                    <option value="3.75">~3.75 MP</option>
+                                    <option value="4.00">~4 MP</option>
+                                </select>
+                                <div class="bg-slate-950 border border-slate-800 rounded-md p-1 text-center">
+                                    <span class="block text-[0.5625rem] text-slate-400 font-semibold leading-none">Closest MP (m16)</span>
+                                    <span id="actualMpLabel" class="block text-[0.6875rem] font-mono font-bold text-emerald-400 mt-0.5">1.048 MP</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Canvas Type Selector Section -->
+                <div class="p-4 border-b border-slate-800 bg-slate-900/30">
+                    <label class="block text-[0.625rem] font-semibold text-slate-400 mb-1">Canvas Type</label>
+                    <select id="summaryCanvas" onchange="handleUserInput()" class="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
+                        <option value="single">single</option>
+                        <option value="multi_panel">multi_panel</option>
+                        <option value="collage">collage</option>
+                    </select>
+                </div>
+
+                <!-- Meta Preset Tag Buttons Section with Tabs -->
+                <div class="p-4 border-b border-slate-800 bg-slate-900/30">
+                    <!-- Meta Tag Tab Bar -->
+                    <div class="flex items-center justify-between mb-2 pb-1 border-b border-slate-800/80">
+                        <label class="block text-[0.625rem] font-semibold text-slate-400">Meta Tags</label>
+                        <div class="flex items-center gap-1 bg-slate-950 p-0.5 rounded-md border border-slate-800">
+                            <button type="button" id="metaTabBtn1" onclick="switchMetaTab(1)" title="Add natural-language Meta Tags" class="px-2 py-0.5 text-[0.625rem] font-semibold rounded bg-indigo-600 text-white transition">NL Meta Tags</button>
+                            <button type="button" id="metaTabBtn2" onclick="switchMetaTab(2)" title="Add Danbooru-style Meta Tags" class="px-2 py-0.5 text-[0.625rem] font-semibold rounded text-slate-400 hover:text-slate-200 transition">Anime Meta Tags</button>
+                        </div>
+                    </div>
+
+                    <div id="metaTagsContainer" class="flex flex-wrap gap-1.5">
+                        <!-- Rendered dynamically -->
+                    </div>
+
+                    <!-- Custom Meta Input Field -->
+                    <div id="customMetaInputWrapper" class="mt-2 hidden">
+                        <div class="flex items-center gap-1.5">
+                            <input type="text" id="customMetaInput" onkeydown="handleCustomMetaKeydown(event)" placeholder="Add custom tags (comma-separated)..." class="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-2.5 py-1 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
+                            <button onclick="commitCustomMeta()" class="px-2.5 py-1 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg transition shrink-0">Add</button>
+                        </div>
+                        <p class="text-[0.5625rem] text-slate-400 mt-1">Separate multiple custom tags with commas.</p>
+                    </div>
+
+                    <!-- Dual Meta Tag Suggestions Links -->
+                    <div class="mt-2.5 pt-2 border-t border-slate-800/60 flex items-center justify-between text-[0.5625rem] text-amber-400/90">
+                        <a href="./assets/moss-image-meta-tag-palette-suggestions.html" target="_blank" title="View more Meta Tag suggestions for natural-language prompts" class="hover:text-amber-300 underline flex items-center gap-1 inline-flex">
+                            <span>More NL Meta Tag suggestions</span>
+                            <i data-lucide="external-link" class="w-2.5 h-2.5 inline-block"></i>
+                        </a>
+                        <a href="https://safebooru.donmai.us/" target="_blank" rel="noopener noreferrer" title="Search for anime-related Danbooru Meta Tags" class="hover:text-amber-300 underline flex items-center gap-1 inline-flex">
+                            <span>Danbooru Tags</span>
+                            <i data-lucide="external-link" class="w-2.5 h-2.5 inline-block"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Palette Color Theme Field Section -->
+                <div class="p-4 border-b border-slate-800 bg-slate-900/30">
+                    <label class="block text-[0.625rem] font-semibold text-slate-400 mb-1">Palette values (optional, comma-separated)</label>
+                    <input type="text" id="summaryPalette" oninput="handleUserInput()" placeholder="e.g. #FF5733, deep teal, matte black, synthwave neon" class="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
+                    <p class="text-[0.5625rem] text-slate-400 leading-tight mt-1.5">
+                        As noted in the <a href="https://github.com/OpenMOSS/MOSS-Image/blob/main/skills/moss-image-prompt-enhancer/references/layout.md" target="_blank" title="View more Palette suggestions" class="hover:text-amber-300 underline flex items-center gap-1 inline-flex">OpenMOSS docs</a>: "Use only when they contribute useful visual information". Accepts hex color codes (e.g., <code class="text-slate-300 font-mono">#FF5733</code>, <code class="text-slate-300 font-mono">#C70039</code>, <code class="text-slate-300 font-mono">#900C3F</code>), color names (e.g., <code class="text-slate-300 font-mono">crimson</code>), tones (<code class="text-slate-300 font-mono">pastel-colors</code>, <code class="text-slate-300 font-mono">jewel-toned</code>, <code class="text-slate-300 font-mono">muted desaturated</code> ...), and lighting (for realistic) (e.g., <code class="text-slate-300 font-mono">flash lighting</code>, <code class="text-slate-300 font-mono">cinematic lighting</code>...). <a href="./assets/moss-image-meta-tag-palette-suggestions.html" target="_blank" title="View more Palette suggestions" class="hover:text-amber-300 underline flex items-center gap-1 inline-flex"><span>More Palette suggestions</span> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="external-link" aria-hidden="true" class="lucide lucide-external-link w-2.5 h-2.5 inline-block"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg></a>
+                    </p>
+                    <div class="text-[0.5625rem] text-amber-400/90 flex items-center gap-1 mt-2">
+                        <i data-lucide="info" class="w-3 h-3 shrink-0"></i> Palette values and Meta Tags will be overridden by any conflicting values in the Global Scene Summary or Item Captions/Prompts, which have priority.
+                    </div>
+                </div>
+
+                <!-- Subtle License & Disclaimer Footer -->
+                <div style="text-align:center;" class="px-4 py-2 bg-slate-950 border-t border-slate-800/80 text-[0.5625rem] text-slate-500 flex flex-col gap-0.5 shrink-0 mt-auto">
+                    <div>Released open-source under the <a href="https://www.gnu.org/licenses/gpl-3.0.html#license-text" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-slate-300 underline">GNU GPL v3 Licence</a>.</div>
+                    <div class="text-slate-500/80">Independent tool • Not affiliated with OpenMOSS. <a href="https://github.com/Rexoplanets/layout-studio-moss-image" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-slate-300 underline inline-flex items-center gap-0.5">View on GitHub <i data-lucide="external-link" class="w-2.5 h-2.5 inline"></i></a></div>
+                    <div class="text-slate-400/90 pt-0.5">If you find this tool useful, feel free to tip me some Buzz on Civitai: ⚡️&nbsp;<a href="https://civitai.red/articles/38547/moss-image-layouts-made-easy-with-the-free-layout-studio" target="_blank" rel="noopener noreferrer" class="text-amber-400 hover:text-amber-300 underline">Civitai.red</a> / <a href="https://civitai.com/articles/38547/moss-image-layouts-made-easy-with-the-free-layout-studio" target="_blank" rel="noopener noreferrer" class="text-amber-400 hover:text-amber-300 underline">Civitai.com</a>&nbsp;⚡️</div>
+                </div>
+            </div>
+
+            <!-- Tab 2 Body: Items / Bounding Boxes -->
+            <div id="tabContent2" class="flex flex-col flex-1 overflow-hidden min-h-0 hidden">
+                <div id="boxListContainer" class="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-3">
+                    <!-- Dynamically populated box cards -->
+                </div>
+            </div>
+        </aside>
+
+        <!-- Vertical Resizer Handle (Desktop) -->
+        <div id="resizer" class="hidden min-[992px]:block w-1.5 bg-slate-950 hover:bg-indigo-500/50 cursor-col-resize shrink-0 transition-colors z-20 order-3"></div>
+    </div>
+
+    <!-- Export Schema Overlay Modal -->
+    <div id="exportModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col">
+            <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/90">
+                <div class="flex items-center gap-2.5">
+                    <div class="bg-indigo-500/10 p-1.5 rounded-lg border border-indigo-500/20">
+                        <i data-lucide="download" class="w-4 h-4 text-indigo-400"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-100">Export the prompt</h3>
+                        <p class="text-[0.6875rem] text-slate-400">Copy structured JSON schema or a text-only version for a natural-language and tag-based prompt</p>
+                    </div>
+                </div>
+                <button onclick="closeExportModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-3">
+                <p class="text-xs text-slate-300">The JSON payload below was optimized for the canvas dimensions: <span id="exportModalDimensions" class="font-mono text-amber-400 font-semibold">1024 x 1024 px</span></p>
+                <p class="text-[0.6875rem] text-amber-400/90 font-medium">Be sure to generate using these exact dimensions.</p>
+                <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                    <pre id="jsonOutput" class="w-full text-xs font-mono text-emerald-400 overflow-auto custom-scrollbar p-2 max-h-[350px]"></pre>
+                </div>
+            </div>
+            <div class="px-6 py-3.5 bg-slate-900/90 border-t border-slate-800 flex items-center justify-end gap-3">
+                <button onclick="copyNaturalLanguage()" title="Copy a simple text version of the prompt" class="px-3.5 py-2 text-xs font-semibold text-slate-200 bg-slate-800 hover:bg-slate-700 hover:text-white border border-slate-700 rounded-lg transition shadow flex items-center gap-1.5">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i> Text-Only Copy
+                </button>
+                <button onclick="copyJSON()" title="Copy the JSON prompt optimized for MOSS-image" class="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg transition shadow-md shadow-indigo-600/20 flex items-center gap-1.5">
+                    <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy JSON
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast Modal -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-slate-800 text-white px-4 py-3 rounded-xl shadow-2xl border border-slate-700 flex items-center gap-2.5 text-xs font-medium translate-y-20 opacity-0 transition-all duration-300 z-50">
+        <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+        <span id="toastMessage">JSON copied to clipboard successfully!</span>
+    </div>
+
+    <!-- Reset Confirmation Modal -->
+    <div id="resetModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden flex flex-col p-6 space-y-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-red-500/10 p-2 rounded-xl border border-red-500/20 text-red-400">
+                    <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h3 class="text-sm font-bold text-slate-100">Reset to Default Settings</h3>
+                    <p class="text-xs text-slate-400 mt-0.5">Are you sure you want to reset the Studio to its default settings?</p>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-2 pt-2">
+                <button onclick="closeResetModal()" class="px-3.5 py-1.5 text-xs font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition border border-slate-700">Cancel</button>
+                <button onclick="confirmResetAll()" class="px-3.5 py-1.5 text-xs font-semibold text-white bg-red-600 hover:bg-red-500 rounded-lg transition shadow-md flex items-center gap-1.5">
+                    Reset
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Clear Cache Confirmation Modal -->
+    <div id="clearCacheModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden flex flex-col p-6 space-y-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-red-500/10 p-2 rounded-xl border border-red-500/20 text-red-400">
+                    <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h3 class="text-sm font-bold text-slate-100">Clear the Studio's cache?</h3>
+                    <p class="text-xs text-slate-400 mt-0.5">Are you sure you want to clear the cache? Undo/Redo history will also be erased.</p>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-2 pt-2">
+                <button onclick="closeClearCacheModal()" class="px-3.5 py-1.5 text-xs font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition border border-slate-700">Cancel</button>
+                <button onclick="confirmClearCache()" class="px-3.5 py-1.5 text-xs font-semibold text-white bg-red-600 hover:bg-red-500 rounded-lg transition shadow-md flex items-center gap-1.5">
+                    Clear
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div id="helpModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden flex flex-col">
+            <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/90">
+                <div class="flex items-center gap-2.5">
+                    <div class="bg-indigo-500/10 p-1.5 rounded-lg border border-indigo-500/20">
+                        <i data-lucide="help-circle" class="w-4 h-4 text-indigo-400"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-100">Help & Utilities</h3>
+                        <p class="text-[0.6875rem] text-slate-400">Keyboard shortcuts and system memory management</p>
+                    </div>
+                </div>
+                <button onclick="closeHelpModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-4 max-h-[70vh] overflow-y-auto custom-scrollbar text-xs">
+                <!-- Feedback & Support Action Card -->
+                <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 flex items-start gap-3">
+                    <div class="bg-indigo-500/10 p-2 rounded-lg border border-indigo-500/20 text-indigo-400 shrink-0 mt-0.5">
+                        <i data-lucide="message-square-plus" class="w-4 h-4"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-slate-200">Feedback & Support</h4>
+                        <p class="text-[0.6875rem] text-slate-400 leading-relaxed mt-0.5">
+                            Encountered a bug or have a feature request? <a href="https://github.com/Rexoplanets/layout-studio-moss-image/issues" target="_blank" rel="noopener noreferrer" class="text-indigo-400 hover:text-indigo-300 underline">Report an issue on GitHub</a>. If you don't use GitHub, leave a comment on the Civitai article: <a href="https://civitai.red/articles/38547/moss-image-layouts-made-easy-with-the-free-layout-studio" target="_blank" rel="noopener noreferrer" class="text-indigo-400 hover:text-indigo-300 underline">Civitai.red</a> / <a href="https://civitai.com/articles/38547/moss-image-layouts-made-easy-with-the-free-layout-studio" target="_blank" rel="noopener noreferrer" class="text-indigo-400 hover:text-indigo-300 underline">Civitai.com</a>.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Memory Cache Management Action -->
+                <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between">
+                    <div>
+                        <h4 class="font-bold text-slate-200">System Cache & Memory</h4>
+                        <p class="text-[0.625rem] text-slate-400">Flush saved snapshots, reference images, and history stacks</p>
+                    </div>
+                    <button onclick="openClearCacheModalFromHelp()" class="px-3 py-1.5 text-xs font-semibold text-white bg-red-600 hover:bg-red-500 rounded-lg transition shadow flex items-center gap-1.5">
+                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Clear Cache
+                    </button>
+                </div>
+
+                <h3 class="font-bold text-xs text-slate-200 pt-2 border-t border-slate-800/80">Keyboard Shortcuts</h3>
+
+                <div>
+                    <h4 class="font-bold text-indigo-400 uppercase tracking-wider text-[0.6875rem] mb-2">Canvas & Element Editing</h4>
+                    <div class="space-y-1.5 font-mono text-slate-300">
+                        <div class="flex justify-between bg-slate-950 px-2.5 py-1 rounded border border-slate-800"><span>Delete / Backspace</span><span class="text-slate-400 font-sans">Delete selected item</span></div>
+                        <div class="flex justify-between bg-slate-950 px-2.5 py-1 rounded border border-slate-800"><span>Escape</span><span class="text-slate-400 font-sans">Deselect box / Close modal</span></div>
+                        <div class="flex justify-between bg-slate-950 px-2.5 py-1 rounded border border-slate-800"><span>Tab / Shift+Tab</span><span class="text-slate-400 font-sans">Cycle through boxes</span></div>
+                        <div class="flex justify-between bg-slate-950 px-2.5 py-1 rounded border border-slate-800"><span>Ctrl+D / Cmd+D</span><span class="text-slate-400 font-sans">Duplicate selected box</span></div>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-indigo-400 uppercase tracking-wider text-[0.6875rem] mb-2">Fine-Tuning Box Positions</h4>
+                    <div class="space-y-1.5 font-mono text-slate-300">
+                        <div class="flex justify-between bg-slate-950 px-2.5 py-1 rounded border border-slate-800"><span>Arrow Keys</span><span class="text-slate-400 font-sans">Nudge by 10px</span></div>
+                        <div class="flex justify-between bg-slate-950 px-2.5 py-1 rounded border border-slate-800"><span>Shift + Arrow Keys</span><span class="text-slate-400 font-sans">Nudge by 50px</span></div>
+                        <div class="flex justify-between bg-slate-950 px-2.5 py-1 rounded border border-slate-800"><span>Alt/Option + Arrow Keys</span><span class="text-slate-400 font-sans">Resize box</span></div>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-indigo-400 uppercase tracking-wider text-[0.6875rem] mb-2">Workflow & Output Actions</h4>
+                    <div class="space-y-1.5 font-mono text-slate-300">
+                        <div class="flex justify-between bg-slate-950 px-2.5 py-1 rounded border border-slate-800"><span>Ctrl+Z / Cmd+Z</span><span class="text-slate-400 font-sans">Undo</span></div>
+                        <div class="flex justify-between bg-slate-950 px-2.5 py-1 rounded border border-slate-800"><span>Ctrl+Y / Cmd+Shift+Z</span><span class="text-slate-400 font-sans">Redo</span></div>
+                        <div class="flex justify-between bg-slate-950 px-2.5 py-1 rounded border border-slate-800"><span>Ctrl+Shift+C / Cmd+Shift+C</span><span class="text-slate-400 font-sans">Copy JSON output</span></div>
+                        <div class="flex justify-between bg-slate-950 px-2.5 py-1 rounded border border-slate-800"><span>Ctrl+Shift+N / Cmd+Shift+N</span><span class="text-slate-400 font-sans">Copy Text Prompt</span></div>
+                        <div class="flex justify-between bg-slate-950 px-2.5 py-1 rounded border border-slate-800"><span>Ctrl+I / Cmd+I</span><span class="text-slate-400 font-sans">Open Import JSON</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import JSON Modal -->
+    <div id="importModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-xl shadow-2xl overflow-hidden flex flex-col">
+            <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/90">
+                <div class="flex items-center gap-2.5">
+                    <div class="bg-indigo-500/10 p-1.5 rounded-lg border border-indigo-500/20">
+                        <i data-lucide="file-input" class="w-4 h-4 text-indigo-400"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-100">Import MOSS-Image JSON Schema</h3>
+                    </div>
+                </div>
+                <button onclick="closeImportModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div class="bg-slate-950/60 border border-slate-800 rounded-xl p-3.5 space-y-2">
+                    <label class="block text-xs font-bold text-slate-200">Import image dimensions (optional)</label>
+                    <p class="text-[0.6875rem] text-slate-400 leading-relaxed">Before importing, it's best to <span class="text-amber-400">first resize the canvas' width and height</span> to those of the existing image, <em>then</em> paste your MOSS-Image JSON below.</p>
+                    <div class="grid grid-cols-2 gap-3 pt-1">
+                        <div>
+                            <label class="block text-[0.625rem] font-semibold text-slate-400 mb-1">Canvas Width (px)</label>
+                            <input type="number" id="importCanvasWidth" placeholder="e.g. 1024" step="16" min="128" max="4096" class="w-full bg-slate-900 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block text-[0.625rem] font-semibold text-slate-400 mb-1">Canvas Height (px)</label>
+                            <input type="number" id="importCanvasHeight" placeholder="e.g. 1024" step="16" min="128" max="4096" class="w-full bg-slate-900 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">JSON Payload</label>
+                    <textarea id="importJsonInput" placeholder='{
+  "summary": "...",
+  "items": [
+    {
+      "bbox": [ymin, xmin, ymax, xmax],
+      "label": "text|object|character",
+      "text": "...",
+      "caption": "..."
+    }
+  ]
+}' class="w-full bg-slate-950 border border-slate-700/80 rounded-xl p-3 text-xs font-mono text-slate-200 placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 custom-scrollbar"></textarea>
+                    <p id="importError" class="text-[0.6875rem] text-red-400 mt-1.5 hidden"></p>
+                </div>
+            </div>
+            <div class="px-6 py-3.5 bg-slate-900/90 border-t border-slate-800 flex items-center justify-end gap-3">
+                <button onclick="closeImportModal()" class="px-4 py-2 text-xs font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition border border-slate-700">Cancel</button>
+                <button onclick="executeImportJSON()" class="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg transition shadow-md shadow-indigo-600/20 flex items-center gap-1.5">
+                    <i data-lucide="check" class="w-4 h-4"></i> Import & Render
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Script Logic -->
+    <script>
+        // Natural Language vs. Anime Meta Tags Presets
+        const NL_META_TAGS = [
+            'poster', 'photo', 'illustration', 'infographic',
+            'comic', '3d-render', 'product-shot', 'studio-photography',
+            'fashion-photography', 'graphic-novel', 'etching', 'oil-painting', 'pen-and-ink'
+        ];
+
+        const ANIME_META_TAGS = [
+            'anime', 'manga', 'cel shading', 'line art', 'retro anime', 'vtuber style',
+            'masterpiece', 'best quality', 'highres', 'absurdres',
+            'close-up', 'cowboy shot', 'full body', 'upper body',
+            'detailed background', 'simple background', 'white background'
+        ];
+
+        let activeMetaTab = 1; // 1: Natural Language, 2: Anime
+        let isSmartHelperDismissed = false;
+
+        // Aspect Ratio Presets Tables Data
+        const PRESET_TABLES = {
+            '1:1': {
+                '1.00': { w: 1024, h: 1024, mp: '1.048' },
+                '1.25': { w: 1120, h: 1120, mp: '1.254' },
+                '1.50': { w: 1232, h: 1232, mp: '1.518' },
+                '1.75': { w: 1328, h: 1328, mp: '1.764' },
+                '2.00': { w: 1408, h: 1408, mp: '1.982' },
+                '2.25': { w: 1504, h: 1504, mp: '2.262' },
+                '2.50': { w: 1584, h: 1584, mp: '2.509' },
+                '2.75': { w: 1664, h: 1664, mp: '2.769' },
+                '3.00': { w: 1728, h: 1728, mp: '2.986' },
+                '3.25': { w: 1808, h: 1808, mp: '3.269' },
+                '3.50': { w: 1872, h: 1872, mp: '3.504' },
+                '3.75': { w: 1936, h: 1936, mp: '3.748' },
+                '4.00': { w: 2000, h: 2000, mp: '4.000' }
+            },
+            '2:3': {
+                '1.00': { w: 832, h: 1248, mp: '1.038' },
+                '1.25': { w: 928, h: 1392, mp: '1.292' },
+                '1.50': { w: 992, h: 1488, mp: '1.476' },
+                '1.75': { w: 1088, h: 1632, mp: '1.776' },
+                '2.00': { w: 1152, h: 1728, mp: '1.991' },
+                '2.25': { w: 1216, h: 1824, mp: '2.218' },
+                '2.50': { w: 1280, h: 1920, mp: '2.458' },
+                '2.75': { w: 1344, h: 2016, mp: '2.710' },
+                '3.00': { w: 1408, h: 2112, mp: '2.974' },
+                '3.25': { w: 1472, h: 2208, mp: '3.250' },
+                '3.50': { w: 1536, h: 2304, mp: '3.539' },
+                '3.75': { w: 1568, h: 2352, mp: '3.688' },
+                '4.00': { w: 1632, h: 2448, mp: '3.995' }
+            },
+            '3:4': {
+                '1.00': { w: 864, h: 1152, mp: '0.995' },
+                '1.25': { w: 960, h: 1280, mp: '1.229' },
+                '1.50': { w: 1056, h: 1408, mp: '1.487' },
+                '1.75': { w: 1152, h: 1536, mp: '1.769' },
+                '2.00': { w: 1248, h: 1664, mp: '2.077' },
+                '2.25': { w: 1296, h: 1728, mp: '2.239' },
+                '2.50': { w: 1392, h: 1856, mp: '2.584' },
+                '2.75': { w: 1440, h: 1920, mp: '2.765' },
+                '3.00': { w: 1488, h: 1984, mp: '2.952' },
+                '3.25': { w: 1584, h: 2112, mp: '3.345' },
+                '3.50': { w: 1632, h: 2176, mp: '3.551' },
+                '3.75': { w: 1680, h: 2240, mp: '3.763' },
+                '4.00': { w: 1728, h: 2304, mp: '3.981' }
+            },
+            '9:16': {
+                '1.00': { w: 720, h: 1280, mp: '0.922' },
+                '1.25': { w: 864, h: 1536, mp: '1.327' },
+                '1.50': { w: 864, h: 1536, mp: '1.327' },
+                '1.75': { w: 1008, h: 1792, mp: '1.806' },
+                '2.00': { w: 1008, h: 1792, mp: '1.806' },
+                '2.25': { w: 1152, h: 2048, mp: '2.359' },
+                '2.50': { w: 1152, h: 2048, mp: '2.359' },
+                '2.75': { w: 1296, h: 2304, mp: '2.986' },
+                '3.00': { w: 1296, h: 2304, mp: '2.986' },
+                '3.25': { w: 1296, h: 2304, mp: '2.986' },
+                '3.50': { w: 1440, h: 2560, mp: '3.686' },
+                '3.75': { w: 1440, h: 2560, mp: '3.686' },
+                '4.00': { w: 1440, h: 2560, mp: '3.686' }
+            },
+            '9:21': {
+                '1.00': { w: 720, h: 1680, mp: '1.210' },
+                '1.25': { w: 720, h: 1680, mp: '1.210' },
+                '1.50': { w: 864, h: 2016, mp: '1.742' },
+                '1.75': { w: 864, h: 2016, mp: '1.742' },
+                '2.00': { w: 864, h: 2016, mp: '1.742' },
+                '2.25': { w: 1008, h: 2352, mp: '2.371' },
+                '2.50': { w: 1008, h: 2352, mp: '2.371' },
+                '2.75': { w: 1152, h: 2688, mp: '3.097' },
+                '3.00': { w: 1152, h: 2688, mp: '3.097' },
+                '3.25': { w: 1152, h: 2688, mp: '3.097' },
+                '3.50': { w: 1152, h: 2688, mp: '3.097' },
+                '3.75': { w: 1296, h: 3024, mp: '3.919' },
+                '4.00': { w: 1296, h: 3024, mp: '3.919' }
+            }
+        };
+
+        let currentSizeMode = 'presets'; // 'presets' | 'custom'
+        let currentPresetCat = 'square'; // 'square' | 'portrait' | 'landscape'
+        let currentAspect = '1:1';
+        let currentMp = '1.00';
+
+        let fontScaleLevel = 0; // 0: 100%, 1: 112%, 2: 125%
+
+        const STORAGE_KEY = 'moss_canvas_state';
+        const textareaHeights = {};
+        let enableGridSnap = true;
+        let activeTab = 1;
+        let activeBoxId = null;
+        let isDragging = false;
+        let dragMode = null;
+        let dragStartX = 0;
+        let dragStartY = 0;
+        let initialBoxCoords = null;
+        let draggedCardIndex = null;
+        let isApplyingHistoryState = false; // Flag to prevent pushing states during Undo/Redo
+
+        const MAX_HISTORY = 50;
+        let undoStack = [];
+        let redoStack = [];
+
+        let canvasState = {
+            width: 1024,
+            height: 1024,
+            summary: "A professional cinematic poster with bold typography and detailed background elements",
+            meta: ["poster"],
+            palette: [],
+            canvasType: "single",
+            boxes: [
+                {
+                    id: 'box_1',
+                    label: 'text',
+                    text: 'MOSS-IMAGE',
+                    caption: 'bold metallic gold serif typography',
+                    ymin: -450,
+                    xmin: -400,
+                    ymax: -250,
+                    xmax: 400
+                },
+                {
+                    id: 'box_2',
+                    label: 'object',
+                    text: '',
+                    caption: 'a futuristic obsidian monolith glowing with neon cyan energy',
+                    ymin: -150,
+                    xmin: -300,
+                    ymax: 450,
+                    xmax: 300
+                }
+            ]
+        };
+
+        // Font Zoom Control Functions
+        window.zoomTextIn = function() {
+            if (fontScaleLevel < 2) {
+                fontScaleLevel++;
+                window.updateFontScaleUI();
+            }
+        };
+
+        window.zoomTextOut = function() {
+            if (fontScaleLevel > 0) {
+                fontScaleLevel--;
+                window.updateFontScaleUI();
+            }
+        };
+
+        window.updateFontScaleUI = function() {
+            const body = document.getElementById('appBody');
+            const zoomOutBtn = document.getElementById('zoomOutTextBtn');
+
+            if (body) {
+                body.className = `bg-slate-950 text-slate-100 h-full flex flex-col overflow-hidden selection:bg-indigo-500 selection:text-white font-scale-${fontScaleLevel}`;
+            }
+
+            if (zoomOutBtn) {
+                zoomOutBtn.disabled = (fontScaleLevel === 0);
+            }
+        };
+
+        // Reference Background Image Engine
+        window.triggerReferenceImageSelect = function() {
+            const fileInput = document.getElementById('refFileInput');
+            if (fileInput) fileInput.click();
+        };
+
+        window.handleReferenceImageUpload = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imgEl = document.getElementById('refBgImage');
+                const toolbar = document.getElementById('refImgToolbar');
+                if (imgEl) {
+                    imgEl.src = e.target.result;
+                    imgEl.classList.remove('hidden');
+                }
+                if (toolbar) {
+                    toolbar.classList.remove('hidden');
+                    toolbar.classList.add('flex');
+                }
+                window.showToast("Reference background image inserted!");
+            };
+            reader.readAsDataURL(file);
+        };
+
+        window.updateRefOpacity = function(val) {
+            const imgEl = document.getElementById('refBgImage');
+            if (imgEl) {
+                imgEl.style.opacity = (val / 100);
+            }
+        };
+
+        window.clearReferenceImage = function() {
+            const imgEl = document.getElementById('refBgImage');
+            const toolbar = document.getElementById('refImgToolbar');
+            const fileInput = document.getElementById('refFileInput');
+
+            if (imgEl) {
+                imgEl.src = '';
+                imgEl.classList.add('hidden');
+            }
+            if (toolbar) {
+                toolbar.classList.add('hidden');
+                toolbar.classList.remove('flex');
+            }
+            if (fileInput) fileInput.value = '';
+            window.showToast("Reference image removed.");
+        };
+
+        // Utility Functions
+        window.initIcons = function() {
+            try {
+                if (window.lucide && typeof window.lucide.createIcons === 'function') {
+                    window.lucide.createIcons();
+                } else if (typeof lucide !== 'undefined' && typeof lucide.createIcons === 'function') {
+                    lucide.createIcons();
+                }
+            } catch (e) {
+                console.warn('Lucide icon initialization skipped:', e);
+            }
+        };
+
+        window.escapeHtml = function(str) {
+            if (!str) return '';
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        };
+
+        window.getBoxColorClass = function(label) {
+            switch (label) {
+                case 'text': return { bg: 'bg-indigo-500/20', border: 'border-indigo-500', text: 'text-indigo-400', badge: 'bg-indigo-600', fillBg: '#4f46e5' };
+                case 'object': return { bg: 'bg-emerald-500/20', border: 'border-emerald-500', text: 'text-emerald-400', badge: 'bg-emerald-600', fillBg: '#059669' };
+                case 'character': return { bg: 'bg-amber-500/20', border: 'border-amber-500', text: 'text-amber-400', badge: 'bg-amber-600', fillBg: '#d97706' };
+                default: return { bg: 'bg-slate-500/20', border: 'border-slate-500', text: 'text-slate-400', badge: 'bg-slate-600', fillBg: '#475569' };
+            }
+        };
+
+        window.saveTextareaHeights = function() {
+            document.querySelectorAll('textarea').forEach(el => {
+                if (el.id || el.closest('[data-box-id]')) {
+                    const baseKey = el.id || el.closest('[data-box-id]').getAttribute('data-box-id');
+                    const fieldAttr = el.getAttribute('data-field');
+                    const key = fieldAttr ? `${baseKey}_${fieldAttr}` : baseKey;
+                    if (el.style.height) {
+                        textareaHeights[key] = el.style.height;
+                    }
+                }
+            });
+        };
+
+        window.restoreTextareaHeights = function() {
+            document.querySelectorAll('textarea').forEach(el => {
+                const baseKey = el.id || (el.closest('[data-box-id]') ? el.closest('[data-box-id]').getAttribute('data-box-id') : null);
+                const fieldAttr = el.getAttribute('data-field');
+                const key = fieldAttr ? `${baseKey}_${fieldAttr}` : baseKey;
+                if (key && textareaHeights[key]) {
+                    el.style.height = textareaHeights[key];
+                }
+            });
+        };
+
+        window.saveStateToLocalStorage = function() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(canvasState));
+            } catch (e) {
+                console.warn("Unable to save state to localStorage", e);
+            }
+        };
+
+        window.loadStateFromLocalStorage = function() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    canvasState = JSON.parse(saved);
+                }
+            } catch (e) {
+                console.warn("Unable to load state from localStorage", e);
+            }
+        };
+
+        // Presets & Dimensions Calculation Engine
+        window.getPresetDimensions = function(aspect, mpVal) {
+            let baseKey = aspect;
+            let isReversed = false;
+
+            if (aspect === '3:2') { baseKey = '2:3'; isReversed = true; }
+            else if (aspect === '4:3') { baseKey = '3:4'; isReversed = true; }
+            else if (aspect === '16:9') { baseKey = '9:16'; isReversed = true; }
+            else if (aspect === '21:9') { baseKey = '9:21'; isReversed = true; }
+
+            const entry = PRESET_TABLES[baseKey] && PRESET_TABLES[baseKey][mpVal]
+                ? PRESET_TABLES[baseKey][mpVal]
+                : { w: 1024, h: 1024, mp: '1.048' };
+
+            if (isReversed) {
+                return { width: entry.h, height: entry.w, mp: entry.mp };
+            }
+            return { width: entry.w, height: entry.h, mp: entry.mp };
+        };
+
+        // Reverse lookup: Given W & H, find exact matching preset combination
+        window.findPresetForDimensions = function(w, h) {
+            const allAspects = ['1:1', '2:3', '3:4', '9:16', '9:21', '3:2', '4:3', '16:9', '21:9'];
+            const mpKeys = ['1.00', '1.25', '1.50', '1.75', '2.00', '2.25', '2.50', '2.75', '3.00', '3.25', '3.50', '3.75', '4.00'];
+
+            for (let aspect of allAspects) {
+                for (let mp of mpKeys) {
+                    const res = window.getPresetDimensions(aspect, mp);
+                    if (res.width === w && res.height === h) {
+                        let cat = 'square';
+                        if (['2:3', '3:4', '9:16', '9:21'].includes(aspect)) cat = 'portrait';
+                        else if (['3:2', '4:3', '16:9', '21:9'].includes(aspect)) cat = 'landscape';
+                        return { found: true, category: cat, aspect: aspect, mp: mp };
+                    }
+                }
+            }
+            return { found: false };
+        };
+
+        window.applyPresetDimensions = function() {
+            if (currentSizeMode !== 'presets') return;
+            const res = window.getPresetDimensions(currentAspect, currentMp);
+
+            const widthEl = document.getElementById('canvasWidth');
+            const heightEl = document.getElementById('canvasHeight');
+            const actualMpEl = document.getElementById('actualMpLabel');
+            const targetMpSelect = document.getElementById('targetMpSelect');
+
+            if (widthEl) widthEl.value = res.width;
+            if (heightEl) heightEl.value = res.height;
+            if (actualMpEl) actualMpEl.innerText = `${res.mp} MP`;
+            if (targetMpSelect) targetMpSelect.value = currentMp;
+
+            canvasState.width = res.width;
+            canvasState.height = res.height;
+
+            window.updateCanvasDimensions();
+            window.updateJSON();
+        };
+
+        window.renderAspectGrid = function() {
+            const col1 = document.getElementById('aspectCol1');
+            const col2 = document.getElementById('aspectCol2');
+            if (!col1 || !col2) return;
+
+            let col1Ratios = [];
+            let col2Ratios = [];
+
+            if (currentPresetCat === 'square') {
+                col1Ratios = ['1:1'];
+                col2Ratios = [];
+            } else if (currentPresetCat === 'portrait') {
+                col1Ratios = ['2:3', '3:4'];
+                col2Ratios = ['9:16', '9:21'];
+            } else if (currentPresetCat === 'landscape') {
+                col1Ratios = ['3:2', '4:3'];
+                col2Ratios = ['16:9', '21:9'];
+            }
+
+            const renderButtons = (list) => {
+                return list.map(ratio => {
+                    const isActive = currentAspect === ratio;
+                    const activeStyle = isActive
+                        ? 'bg-indigo-600 text-white border-indigo-500 font-semibold shadow-sm shadow-indigo-600/30'
+                        : 'bg-slate-950 text-slate-400 border-slate-800 hover:text-slate-200 hover:border-slate-700';
+
+                    return `<button type="button" onclick="handleAspectChange('${ratio}')" class="w-full px-2 py-1 text-[0.6875rem] rounded-md border ${activeStyle} transition-all text-center">${ratio}</button>`;
+                }).join('');
+            };
+
+            col1.innerHTML = renderButtons(col1Ratios);
+            col2.innerHTML = renderButtons(col2Ratios);
+        };
+
+        window.handleSizeModeChange = function(mode) {
+            currentSizeMode = mode;
+            const presetsPanel = document.getElementById('presetsPanel');
+            const presetsRadio = document.querySelector('input[name="sizeMode"][value="presets"]');
+            const customRadio = document.querySelector('input[name="sizeMode"][value="custom"]');
+
+            if (mode === 'presets') {
+                if (presetsRadio) presetsRadio.checked = true;
+                if (presetsPanel) presetsPanel.classList.remove('hidden');
+                window.applyPresetDimensions();
+            } else {
+                if (customRadio) customRadio.checked = true;
+                if (presetsPanel) presetsPanel.classList.add('hidden');
+            }
+        };
+
+        window.handlePresetCatChange = function(cat) {
+            currentPresetCat = cat;
+            if (cat === 'square') currentAspect = '1:1';
+            else if (cat === 'portrait') currentAspect = '2:3';
+            else if (cat === 'landscape') currentAspect = '3:2';
+
+            const catRadio = document.querySelector(`input[name="presetCat"][value="${cat}"]`);
+            if (catRadio) catRadio.checked = true;
+
+            window.renderAspectGrid();
+            window.applyPresetDimensions();
+            if (!isApplyingHistoryState) window.pushState();
+        };
+
+        window.handleAspectChange = function(ratio) {
+            currentAspect = ratio;
+            window.renderAspectGrid();
+            window.applyPresetDimensions();
+            if (!isApplyingHistoryState) window.pushState();
+        };
+
+        window.handleMpChange = function(mpVal) {
+            currentMp = mpVal;
+            window.applyPresetDimensions();
+            if (!isApplyingHistoryState) window.pushState();
+        };
+
+        window.handleManualDimensionInput = function() {
+            if (currentSizeMode !== 'custom') {
+                window.handleSizeModeChange('custom');
+            }
+        };
+
+        // State & History Management
+        window.pushState = function() {
+            if (isApplyingHistoryState) return;
+            window.saveTextareaHeights();
+
+            const currentStateStr = JSON.stringify(canvasState);
+
+            // Deduplicate: Don't push if state is identical to the top of undoStack
+            if (undoStack.length > 0 && undoStack[undoStack.length - 1] === currentStateStr) {
+                return;
+            }
+
+            if (undoStack.length >= MAX_HISTORY) {
+                undoStack.shift();
+            }
+
+            undoStack.push(currentStateStr);
+            redoStack = []; // Reset redo stack on new user action
+            window.updateUndoRedoUI();
+            window.saveStateToLocalStorage();
+        };
+
+        window.undo = function() {
+            if (undoStack.length === 0) return;
+            window.saveTextareaHeights();
+
+            isApplyingHistoryState = true;
+
+            // Save current state to redoStack before restoring
+            redoStack.push(JSON.stringify(canvasState));
+
+            const prevStr = undoStack.pop();
+            canvasState = JSON.parse(prevStr);
+
+            window.applyStateToUI();
+            isApplyingHistoryState = false;
+
+            window.updateUndoRedoUI();
+            window.saveStateToLocalStorage();
+        };
+
+        window.redo = function() {
+            if (redoStack.length === 0) return;
+            window.saveTextareaHeights();
+
+            isApplyingHistoryState = true;
+
+            // Save current state back to undoStack before performing redo
+            undoStack.push(JSON.stringify(canvasState));
+
+            const nextStr = redoStack.pop();
+            canvasState = JSON.parse(nextStr);
+
+            window.applyStateToUI();
+            isApplyingHistoryState = false;
+
+            window.updateUndoRedoUI();
+            window.saveStateToLocalStorage();
+        };
+
+        window.updateUndoRedoUI = function() {
+            const undoBtn = document.getElementById('undoBtn');
+            const redoBtn = document.getElementById('redoBtn');
+            if (undoBtn) undoBtn.disabled = (undoStack.length === 0);
+            if (redoBtn) redoBtn.disabled = (redoStack.length === 0);
+        };
+
+        window.handleUserInput = function() {
+            window.updateJSON();
+            window.saveStateToLocalStorage();
+        };
+
+        // Tab Navigation & UI Controls
+        window.switchTab = function(tabNum) {
+            activeTab = tabNum;
+            const btn1 = document.getElementById('tabBtn1');
+            const btn2 = document.getElementById('tabBtn2');
+            const content1 = document.getElementById('tabContent1');
+            const content2 = document.getElementById('tabContent2');
+
+            if (!btn1 || !btn2 || !content1 || !content2) return;
+
+            if (tabNum === 1) {
+                btn1.className = "flex-1 py-3 px-3 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 border-b-2 border-indigo-500 text-indigo-400 bg-slate-900/80 transition";
+                btn2.className = "flex-1 py-3 px-3 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition";
+                content1.classList.remove('hidden');
+                content2.classList.add('hidden');
+            } else {
+                btn2.className = "flex-1 py-3 px-3 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 border-b-2 border-emerald-500 text-emerald-400 bg-slate-900/80 transition";
+                btn1.className = "flex-1 py-3 px-3 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition";
+                content2.classList.remove('hidden');
+                content1.classList.add('hidden');
+            }
+            window.initIcons();
+        };
+
+        window.switchMetaTab = function(tabNum) {
+            activeMetaTab = tabNum;
+            const btn1 = document.getElementById('metaTabBtn1');
+            const btn2 = document.getElementById('metaTabBtn2');
+            if (btn1 && btn2) {
+                if (tabNum === 1) {
+                    btn1.className = "px-2 py-0.5 text-[0.625rem] font-semibold rounded bg-indigo-600 text-white transition";
+                    btn2.className = "px-2 py-0.5 text-[0.625rem] font-semibold rounded text-slate-400 hover:text-slate-200 transition";
+                } else {
+                    btn2.className = "px-2 py-0.5 text-[0.625rem] font-semibold rounded bg-indigo-600 text-white transition";
+                    btn1.className = "px-2 py-0.5 text-[0.625rem] font-semibold rounded text-slate-400 hover:text-slate-200 transition";
+                }
+            }
+            window.renderMetaTags();
+        };
+
+        window.toggleSnapToGrid = function() {
+            enableGridSnap = !enableGridSnap;
+            const btn = document.getElementById('snapGridBtn');
+            const lbl = document.getElementById('snapGridLabel');
+            if (enableGridSnap) {
+                btn.className = "px-3 py-2 text-xs font-medium text-indigo-300 bg-indigo-950/60 hover:bg-indigo-900/60 border border-indigo-700/60 rounded-lg transition flex items-center gap-1.5";
+                lbl.innerText = "ON";
+            } else {
+                btn.className = "px-3 py-2 text-xs font-medium text-slate-400 bg-slate-900 hover:bg-slate-800 border border-slate-700 rounded-lg transition flex items-center gap-1.5";
+                lbl.innerText = "OFF";
+            }
+        };
+
+        window.toggleMetaTag = function(tag) {
+            window.pushState();
+            const idx = canvasState.meta.indexOf(tag);
+            if (idx > -1) {
+                canvasState.meta.splice(idx, 1);
+            } else {
+                canvasState.meta.push(tag);
+            }
+            window.renderMetaTags();
+            window.updateJSON();
+        };
+
+        window.toggleCustomMetaInput = function() {
+            const wrapper = document.getElementById('customMetaInputWrapper');
+            const input = document.getElementById('customMetaInput');
+            if (!wrapper) return;
+            wrapper.classList.toggle('hidden');
+            if (!wrapper.classList.contains('hidden') && input) {
+                input.focus();
+            }
+        };
+
+        window.handleCustomMetaKeydown = function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                window.commitCustomMeta();
+            }
+        };
+
+        window.commitCustomMeta = function() {
+            const input = document.getElementById('customMetaInput');
+            if (!input) return;
+            const val = input.value.trim();
+            if (val) {
+                window.pushState();
+                const newTags = val.split(',').map(s => s.trim()).filter(Boolean);
+                newTags.forEach(t => {
+                    if (!canvasState.meta.includes(t)) {
+                        canvasState.meta.push(t);
+                    }
+                });
+                input.value = '';
+                window.renderMetaTags();
+                window.updateJSON();
+            }
+            input.focus();
+        };
+
+        window.toggleAddBoxMenu = function() {
+            const menu = document.getElementById('addBoxMenu');
+            if (menu) menu.classList.toggle('hidden');
+        };
+
+        window.dismissSmartHelper = function() {
+            isSmartHelperDismissed = true;
+            window.renderBoxesList();
+        };
+
+        // Render Functions
+        window.renderMetaTags = function() {
+            const container = document.getElementById('metaTagsContainer');
+            if (!container) return;
+            let html = '';
+
+            const currentPresetGroup = activeMetaTab === 1 ? NL_META_TAGS : ANIME_META_TAGS;
+
+            currentPresetGroup.forEach(tag => {
+                const isActive = canvasState.meta.includes(tag);
+                const activeStyle = isActive
+                    ? 'bg-indigo-600 text-white border-indigo-500 shadow-sm shadow-indigo-600/30 font-semibold'
+                    : 'bg-slate-950 text-slate-400 border-slate-800 hover:text-slate-200 hover:border-slate-700';
+
+                html += `<button type="button" onclick="toggleMetaTag('${tag}')" class="px-2 py-0.5 text-[0.6875rem] rounded-md border ${activeStyle} transition-all">${tag}</button>`;
+            });
+
+            const allPresetsCombined = [...NL_META_TAGS, ...ANIME_META_TAGS];
+
+            canvasState.meta.forEach(tag => {
+                if (!allPresetsCombined.includes(tag)) {
+                    html += `
+                        <button type="button" onclick="toggleMetaTag('${tag}')" class="px-2 py-0.5 text-[0.6875rem] rounded-md border bg-violet-600 text-white border-violet-500 shadow-sm flex items-center gap-1 font-semibold">
+                            <span>${window.escapeHtml(tag)}</span>
+                            <span class="text-violet-200 hover:text-white">&times;</span>
+                        </button>
+                    `;
+                }
+            });
+
+            html += `<button type="button" onclick="toggleCustomMetaInput()" class="px-2 py-0.5 text-[0.6875rem] rounded-md border border-dashed border-slate-700 text-slate-400 hover:text-indigo-400 hover:border-indigo-500 transition-all font-medium flex items-center gap-0.5">+ Add</button>`;
+
+            container.innerHTML = html;
+        };
+
+        window.renderBoxesList = function() {
+            window.saveTextareaHeights();
+            const container = document.getElementById('boxListContainer');
+            if (!container) return;
+
+            const boxCountEl = document.getElementById('boxCount');
+            if (boxCountEl) boxCountEl.innerText = canvasState.boxes.length;
+
+            if (canvasState.boxes.length === 0) {
+                container.innerHTML = `<div class="text-xs text-slate-500 text-center py-8">No bounding boxes active. Click <b>Add Bounding Box</b> above.</div>`;
+                return;
+            }
+
+            let html = '';
+
+            if (!isSmartHelperDismissed) {
+                html += `
+                    <div id="smartHelperBanner" class="bg-indigo-950/70 border border-indigo-700/60 rounded-xl p-3 text-xs text-indigo-200 relative mb-3">
+                        <button onclick="dismissSmartHelper()" class="absolute top-2 right-2 text-indigo-400 hover:text-white p-0.5 transition" title="Dismiss tip">
+                            <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                        </button>
+                        <p class="pr-5 leading-relaxed">
+                            💡 <strong>Tip:</strong> Let the bounding box control position! Avoid directional terms like "on the left" or "in the upper-right" in your captions/prompts, as prompt text will override canvas box placement.
+                        </p>
+                    </div>
+                `;
+            }
+
+            canvasState.boxes.forEach((box, index) => {
+                const colors = window.getBoxColorClass(box.label);
+                const isActive = activeBoxId === box.id;
+                const isHidden = !!box.hidden;
+                const borderStyle = isActive ? 'border-2 border-white ring-2 ring-white/50 shadow-lg' : 'border-slate-800';
+
+                html += `
+                    <div data-box-id="${box.id}"
+                         ondragstart="handleListDragStart(event, ${index})"
+                         ondragover="handleListDragOver(event)"
+                         ondragleave="handleListDragLeave(event)"
+                         ondrop="handleListDrop(event, ${index})"
+                         ondragend="handleListDragEnd(event)"
+                         onclick="selectBox('${box.id}', false)"
+                         class="bg-slate-950 border ${borderStyle} rounded-xl p-3 space-y-3 transition cursor-pointer hover:border-slate-700 ${isHidden ? 'opacity-60' : ''}">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span onmousedown="enableCardDrag(event)" onmouseup="disableCardDrag(event)" class="cursor-grab active:cursor-grabbing text-slate-500 hover:text-slate-300 flex items-center p-0.5" title="Drag handle to reorder">
+                                    <i data-lucide="grip-vertical" class="w-4 h-4"></i>
+                                </span>
+                                <span class="text-[0.6875rem] font-bold text-slate-400 font-mono">#${index + 1}</span>
+                                <span class="w-2.5 h-2.5 rounded-full ${colors.badge}"></span>
+                                <select onchange="updateBoxField('${box.id}', 'label', this.value)" onclick="event.stopPropagation()" class="bg-slate-900 border border-slate-700 text-[0.6875rem] font-bold ${colors.text} rounded px-2 py-0.5 focus:outline-none">
+                                    <option value="text" ${box.label === 'text' ? 'selected' : ''}>Text</option>
+                                    <option value="object" ${box.label === 'object' ? 'selected' : ''}>Object</option>
+                                    <option value="character" ${box.label === 'character' ? 'selected' : ''}>Character</option>
+                                </select>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <button onclick="event.stopPropagation(); toggleBoxVisibility('${box.id}')" class="text-slate-500 hover:text-amber-400 transition p-1" title="${isHidden ? 'Show Box' : 'Hide Box'}">
+                                    <i data-lucide="${isHidden ? 'eye-off' : 'eye'}" class="w-3.5 h-3.5 ${isHidden ? 'text-amber-400' : ''}"></i>
+                                </button>
+                                <button onclick="event.stopPropagation(); duplicateBox('${box.id}')" class="text-slate-500 hover:text-indigo-400 transition p-1" title="Duplicate Item">
+                                    <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                                </button>
+                                <button onclick="event.stopPropagation(); deleteBox('${box.id}')" class="text-slate-500 hover:text-red-400 transition p-1" title="Delete Item">
+                                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        ${box.label === 'text' ? `
+                            <div>
+                                <label class="block text-[0.625rem] font-semibold text-slate-400 mb-1">Exact text string (accepts line breaks)</label>
+                                <textarea data-field="text" rows="2" oninput="updateBoxField('${box.id}', 'text', this.value)" onchange="pushState()" onclick="event.stopPropagation()" placeholder="e.g. KYOTO DUSK" style="min-height: 54px;" class="w-full bg-slate-900 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-slate-100 font-medium focus:outline-none focus:border-indigo-500 transition custom-scrollbar">${window.escapeHtml(box.text)}</textarea>
+                            </div>
+                        ` : ''}
+
+                        <div>
+                            <label class="block text-[0.625rem] font-semibold text-slate-400 mb-1">Item Caption / Prompt</label>
+                            <textarea data-field="caption" oninput="updateBoxField('${box.id}', 'caption', this.value)" onchange="pushState()" onclick="event.stopPropagation()" placeholder="Visual description..." class="w-full bg-slate-900 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition">${window.escapeHtml(box.caption)}</textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-[0.625rem] font-semibold text-slate-400 mb-1">Click the arrows to fine-tune Item dimensions:</label>
+                            <div class="grid grid-cols-4 gap-1.5 font-mono text-[0.6875rem]">
+                                <div>
+                                    <span class="text-slate-500 text-[0.5625rem]">ymin (top)</span>
+                                    <input type="number" value="${box.ymin}" onchange="updateBoxCoord('${box.id}', 'ymin', this.value)" onclick="event.stopPropagation()" class="w-full bg-slate-900 border border-slate-800 rounded px-1.5 py-0.5 text-slate-200 text-center">
+                                </div>
+                                <div>
+                                    <span class="text-slate-500 text-[0.5625rem]">xmin (left)</span>
+                                    <input type="number" value="${box.xmin}" onchange="updateBoxCoord('${box.id}', 'xmin', this.value)" onclick="event.stopPropagation()" class="w-full bg-slate-900 border border-slate-800 rounded px-1.5 py-0.5 text-slate-200 text-center">
+                                </div>
+                                <div>
+                                    <span class="text-slate-500 text-[0.5625rem]">ymax (bottom)</span>
+                                    <input type="number" value="${box.ymax}" onchange="updateBoxCoord('${box.id}', 'ymax', this.value)" onclick="event.stopPropagation()" class="w-full bg-slate-900 border border-slate-800 rounded px-1.5 py-0.5 text-slate-200 text-center">
+                                </div>
+                                <div>
+                                    <span class="text-slate-500 text-[0.5625rem]">xmax (right)</span>
+                                    <input type="number" value="${box.xmax}" onchange="updateBoxCoord('${box.id}', 'xmax', this.value)" onclick="event.stopPropagation()" class="w-full bg-slate-900 border border-slate-800 rounded px-1.5 py-0.5 text-slate-200 text-center">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            window.restoreTextareaHeights();
+            window.initIcons();
+        };
+
+        window.checkCenterCrosshairHighlight = function() {
+            const guideH = document.getElementById('guideH');
+            const guideV = document.getElementById('guideV');
+            if (!guideH || !guideV) return;
+
+            let hAligned = false;
+            let vAligned = false;
+
+            if (activeBoxId) {
+                const box = canvasState.boxes.find(b => b.id === activeBoxId);
+                if (box) {
+                    const centerY = (box.ymin + box.ymax) / 2;
+                    const centerX = (box.xmin + box.xmax) / 2;
+
+                    if (Math.abs(centerY) < 10) hAligned = true;
+                    if (Math.abs(centerX) < 10) vAligned = true;
+                }
+            }
+
+            if (hAligned) {
+                guideH.className = "absolute top-1/2 left-0 right-0 h-[2px] bg-red-500 shadow-md shadow-red-500/80 pointer-events-none z-30 transition-colors";
+            } else {
+                guideH.className = "absolute top-1/2 left-0 right-0 h-[1px] bg-red-500/40 pointer-events-none z-0 transition-colors";
+            }
+
+            if (vAligned) {
+                guideV.className = "absolute left-1/2 top-0 bottom-0 w-[2px] bg-red-500 shadow-md shadow-red-500/80 pointer-events-none z-30 transition-colors";
+            } else {
+                guideV.className = "absolute left-1/2 top-0 bottom-0 w-[1px] bg-red-500/40 pointer-events-none z-0 transition-colors";
+            }
+        };
+
+        window.renderCanvasBoxes = function() {
+            const layer = document.getElementById('boxesLayer');
+            const wrapper = document.getElementById('canvasWrapper');
+            if (!layer || !wrapper) return;
+
+            const cWidth = wrapper.clientWidth;
+            const cHeight = wrapper.clientHeight;
+
+            let html = '';
+
+            canvasState.boxes.forEach((box, index) => {
+                if (box.hidden) return; // Omit hidden boxes from rendering on canvas
+
+                const colors = window.getBoxColorClass(box.label);
+                const isActive = activeBoxId === box.id;
+
+                const normXmin = (box.xmin + 500) / 1000;
+                const normXmax = (box.xmax + 500) / 1000;
+                const normYmin = (box.ymin + 500) / 1000;
+                const normYmax = (box.ymax + 500) / 1000;
+
+                const left = normXmin * cWidth;
+                const top = normYmin * cHeight;
+                const width = Math.max(16, (normXmax - normXmin) * cWidth);
+                const height = Math.max(16, (normYmax - normYmin) * cHeight);
+
+                const activeStyle = isActive
+                    ? 'border-2 border-white rounded-none bg-black/50 z-20'
+                    : `${colors.bg} ${colors.border} border rounded-lg z-10`;
+
+                const displayText = box.label === 'text' && box.text ? box.text.replace(/\\n|\r?\n/g, ' ') : (box.caption || '');
+
+                html += `
+                    <div id="canvas_box_${box.id}"
+                         onmousedown="startBoxDrag(event, '${box.id}', 'move')"
+                         style="left: ${left}px; top: ${top}px; width: ${width}px; height: ${height}px;"
+                         class="absolute pointer-events-auto ${activeStyle} flex flex-col justify-between p-1.5 cursor-move group select-none">
+
+                        <!-- Top Header Row -->
+                        <div class="flex items-center justify-between pointer-events-none w-full">
+                            <span class="canvas-box-label px-1.5 py-0.5 rounded font-bold text-white uppercase tracking-wider shrink-0" style="background-color: ${colors.fillBg}">
+                                ${box.label.toUpperCase()}
+                            </span>
+                            <span class="canvas-box-label px-1 py-0.5 rounded font-bold font-mono text-white bg-slate-950 border border-slate-800 shrink-0">
+                                #${index + 1}
+                            </span>
+                        </div>
+
+                        <!-- Bottom Caption / Prompt Preview -->
+                        <div class="pointer-events-none w-full truncate">
+                            <span class="canvas-box-label text-white font-medium drop-shadow truncate block">
+                                ${window.escapeHtml(displayText)}
+                            </span>
+                        </div>
+
+                        <!-- Resize Handles (rendered on active box) -->
+                        ${isActive ? `
+                            <div onmousedown="startBoxDrag(event, '${box.id}', 'nw')" class="absolute -top-1 -left-1 w-2.5 h-2.5 bg-white border border-slate-900 rounded-full cursor-nwse-resize"></div>
+                            <div onmousedown="startBoxDrag(event, '${box.id}', 'ne')" class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-white border border-slate-900 rounded-full cursor-nesw-resize"></div>
+                            <div onmousedown="startBoxDrag(event, '${box.id}', 'sw')" class="absolute -bottom-1 -left-1 w-2.5 h-2.5 bg-white border border-slate-900 rounded-full cursor-nesw-resize"></div>
+                            <div onmousedown="startBoxDrag(event, '${box.id}', 'se')" class="absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-white border border-slate-900 rounded-full cursor-nwse-resize"></div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+
+            layer.innerHTML = html;
+            window.checkCenterCrosshairHighlight();
+        };
+
+        window.updateJSON = function() {
+            const summaryEl = document.getElementById('sceneSummary');
+            const canvasTypeEl = document.getElementById('summaryCanvas');
+            const paletteEl = document.getElementById('summaryPalette');
+
+            const summaryVal = summaryEl ? summaryEl.value : canvasState.summary;
+            const canvasTypeVal = canvasTypeEl ? canvasTypeEl.value : canvasState.canvasType;
+            const paletteVal = paletteEl ? paletteEl.value : (canvasState.palette || []).join(', ');
+
+            canvasState.summary = summaryVal;
+            canvasState.canvasType = canvasTypeVal;
+            canvasState.palette = paletteVal.split(',').map(s => s.trim()).filter(Boolean);
+
+            const summaryObj = {
+                caption: canvasState.summary
+            };
+
+            if (canvasState.meta.length > 0) {
+                summaryObj.meta = canvasState.meta;
+            }
+
+            if (canvasState.palette.length > 0) {
+                summaryObj.palette = canvasState.palette;
+            }
+
+            summaryObj.canvas = canvasState.canvasType;
+
+            const payload = {
+                summary: summaryObj,
+                items: canvasState.boxes.filter(b => !b.hidden).map(b => {
+                    const itemObj = {
+                        label: b.label
+                    };
+                    if (b.label === 'text') itemObj.text = (b.text || '').replace(/\\n/g, '\n');
+                    itemObj.caption = b.caption;
+                    itemObj.bbox = [b.ymin, b.xmin, b.ymax, b.xmax];
+                    return itemObj;
+                }),
+                bbox_coord_space: "abs_centralized",
+                bbox_format: "yxyx"
+            };
+
+            const jsonEl = document.getElementById('jsonOutput');
+            if (jsonEl) jsonEl.textContent = JSON.stringify(payload, null, 2);
+
+            const exportDimensionsEl = document.getElementById('exportModalDimensions');
+            if (exportDimensionsEl) {
+                exportDimensionsEl.textContent = `${canvasState.width} x ${canvasState.height} px`;
+            }
+        };
+
+        window.renderAll = function() {
+            window.renderAspectGrid();
+            window.renderMetaTags();
+            window.renderBoxesList();
+            window.renderCanvasBoxes();
+            window.updateJSON();
+        };
+
+        window.validateCanvasSize = function() {
+            const wInput = document.getElementById('canvasWidth');
+            const hInput = document.getElementById('canvasHeight');
+
+            if (!wInput || !hInput) return;
+
+            let w = parseInt(wInput.value) || 1024;
+            let h = parseInt(hInput.value) || 1024;
+
+            w = Math.max(128, Math.min(4096, Math.round(w / 16) * 16));
+            h = Math.max(128, Math.min(4096, Math.round(h / 16) * 16));
+
+            wInput.value = w;
+            hInput.value = h;
+
+            canvasState.width = w;
+            canvasState.height = h;
+        };
+
+        window.updateCanvasDimensions = function() {
+            window.validateCanvasSize();
+            const viewport = document.getElementById('viewportArea');
+            const wrapper = document.getElementById('canvasWrapper');
+
+            if (!viewport || !wrapper) return;
+
+            const availW = Math.max(200, viewport.clientWidth - 40);
+            const availH = Math.max(200, viewport.clientHeight - 40);
+
+            const w = canvasState.width;
+            const h = canvasState.height;
+
+            let displayW, displayH;
+            const aspect = w / h;
+
+            if (availW / availH > aspect) {
+                displayH = availH;
+                displayW = Math.round(availH * aspect);
+            } else {
+                displayW = availW;
+                displayH = Math.round(availW / aspect);
+            }
+
+            wrapper.style.width = displayW + 'px';
+            wrapper.style.height = displayH + 'px';
+
+            const indicator = document.getElementById('canvasAspectLabel');
+            if (indicator) {
+                indicator.innerText = `${w} × ${h} px`;
+            }
+
+            window.renderCanvasBoxes();
+            window.updateJSON();
+        };
+
+        window.applyStateToUI = function() {
+            const summaryEl = document.getElementById('sceneSummary');
+            const paletteEl = document.getElementById('summaryPalette');
+            const canvasEl = document.getElementById('summaryCanvas');
+            const widthEl = document.getElementById('canvasWidth');
+            const heightEl = document.getElementById('canvasHeight');
+
+            if (summaryEl) summaryEl.value = canvasState.summary || "";
+            if (paletteEl) paletteEl.value = (canvasState.palette || []).join(', ');
+            if (canvasEl) canvasEl.value = canvasState.canvasType || "single";
+            if (widthEl) widthEl.value = canvasState.width || 1024;
+            if (heightEl) heightEl.value = canvasState.height || 1024;
+
+            const match = window.findPresetForDimensions(canvasState.width, canvasState.height);
+            if (match.found) {
+                currentPresetCat = match.category;
+                currentAspect = match.aspect;
+                currentMp = match.mp;
+                window.handlePresetCatChange(match.category);
+                window.handleSizeModeChange('presets');
+            } else {
+                window.handleSizeModeChange('custom');
+            }
+
+            window.renderAspectGrid();
+            window.updateCanvasDimensions();
+            window.renderAll();
+            window.restoreTextareaHeights();
+        };
+
+        // Canvas Deselection Handler
+        window.deselectAllBoxes = function() {
+            activeBoxId = null;
+            window.renderCanvasBoxes();
+            window.renderBoxesList();
+        };
+
+        window.handleViewportClick = function(e) {
+            if (e.target.id === 'viewportArea') {
+                window.deselectAllBoxes();
+            }
+        };
+
+        window.handleCanvasWrapperClick = function(e) {
+            if (e.target.id === 'canvasWrapper' || e.target.id === 'refBgImage') {
+                window.deselectAllBoxes();
+            }
+        };
+
+        // Item Operations & Card Management
+        window.selectBox = function(id, focusInput = true) {
+            activeBoxId = id;
+            if (window.innerWidth >= 992) {
+                window.switchTab(2);
+            }
+            window.renderCanvasBoxes();
+
+            document.querySelectorAll('#boxListContainer > div').forEach(el => {
+                if (el.getAttribute('data-box-id') === id) {
+                    el.classList.remove('border-slate-800');
+                    el.classList.add('border-2', 'border-white', 'ring-2', 'ring-white/50', 'shadow-lg');
+                    if (focusInput && window.innerWidth >= 992) {
+                        const textarea = el.querySelector('textarea[data-field="caption"]') || el.querySelector('textarea');
+                        if (textarea) {
+                            textarea.focus();
+                            const val = textarea.value;
+                            textarea.value = '';
+                            textarea.value = val;
+                        }
+                    }
+                } else {
+                    el.classList.remove('border-2', 'border-white', 'ring-2', 'ring-white/50', 'shadow-lg');
+                    el.classList.add('border-slate-800');
+                }
+            });
+        };
+
+        window.toggleBoxVisibility = function(id) {
+            const box = canvasState.boxes.find(b => b.id === id);
+            if (box) {
+                window.pushState();
+                box.hidden = !box.hidden;
+                window.renderAll();
+            }
+        };
+
+        window.addNewBox = function(type = 'text') {
+            window.pushState();
+            const menu = document.getElementById('addBoxMenu');
+            if (menu) menu.classList.add('hidden');
+            const newId = 'box_' + Date.now();
+
+            const defaultBox = {
+                id: newId,
+                label: type,
+                text: type === 'text' ? 'NEW TEXT' : '',
+                caption: type === 'text' ? 'bold serif text' : type === 'character' ? 'a detailed character portrait' : 'detailed visual description of this object',
+                ymin: -200,
+                xmin: -250,
+                ymax: 200,
+                xmax: 250,
+                hidden: false
+            };
+
+            canvasState.boxes.push(defaultBox);
+            window.renderAll();
+            window.selectBox(newId);
+        };
+
+        window.duplicateBox = function(id) {
+            const srcBox = canvasState.boxes.find(b => b.id === id);
+            if (!srcBox) return;
+
+            window.pushState();
+            const newId = 'box_' + Date.now();
+            const copyBox = {
+                ...srcBox,
+                id: newId,
+                ymin: Math.min(450, srcBox.ymin + 40),
+                xmin: Math.min(450, srcBox.xmin + 40),
+                ymax: Math.min(500, srcBox.ymax + 40),
+                xmax: Math.min(500, srcBox.xmax + 40)
+            };
+            canvasState.boxes.push(copyBox);
+            window.renderAll();
+            window.selectBox(newId);
+        };
+
+        window.duplicateSelectedBox = function() {
+            if (activeBoxId) {
+                window.duplicateBox(activeBoxId);
+            }
+        };
+
+        window.deleteBox = function(id) {
+            window.pushState();
+            canvasState.boxes = canvasState.boxes.filter(b => b.id !== id);
+            if (activeBoxId === id) {
+                activeBoxId = canvasState.boxes.length > 0 ? canvasState.boxes[0].id : null;
+            }
+            if (canvasState.boxes.length === 0) {
+                window.switchTab(1);
+            }
+            window.renderAll();
+        };
+
+        window.updateBoxField = function(id, field, value) {
+            const box = canvasState.boxes.find(b => b.id === id);
+            if (box) {
+                box[field] = value;
+                if (field === 'label') {
+                    window.pushState();
+                    window.renderAll();
+                } else {
+                    window.updateJSON();
+                    window.renderCanvasBoxes();
+                }
+            }
+        };
+
+        window.updateBoxCoord = function(id, coord, val) {
+            const box = canvasState.boxes.find(b => b.id === id);
+            if (box) {
+                window.pushState();
+                box[coord] = parseInt(val) || 0;
+                window.renderAll();
+            }
+        };
+
+        // Drag-and-Drop List Reordering Handlers
+        window.enableCardDrag = function(e) {
+            const card = e.currentTarget.closest('[data-box-id]');
+            if (card) {
+                card.setAttribute('draggable', 'true');
+            }
+        };
+
+        window.disableCardDrag = function(e) {
+            const card = e.currentTarget.closest('[data-box-id]');
+            if (card) {
+                card.removeAttribute('draggable');
+            }
+        };
+
+        window.handleListDragStart = function(e, index) {
+            draggedCardIndex = index;
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', index);
+            e.currentTarget.classList.add('opacity-50');
+        };
+
+        window.handleListDragOver = function(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            const targetCard = e.currentTarget;
+            targetCard.classList.add('border-t-4', 'border-t-indigo-500');
+        };
+
+        window.handleListDragLeave = function(e) {
+            e.currentTarget.classList.remove('border-t-4', 'border-t-indigo-500');
+        };
+
+        window.handleListDrop = function(e, targetIndex) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('border-t-4', 'border-t-indigo-500');
+            if (draggedCardIndex === null) return;
+
+            if (draggedCardIndex !== targetIndex) {
+                window.pushState();
+                const movedItem = canvasState.boxes.splice(draggedCardIndex, 1)[0];
+                canvasState.boxes.splice(targetIndex, 0, movedItem);
+                window.renderAll();
+            }
+            draggedCardIndex = null;
+        };
+
+        window.handleListDragEnd = function(e) {
+            e.currentTarget.removeAttribute('draggable');
+            e.currentTarget.classList.remove('opacity-50', 'border-t-4', 'border-t-indigo-500');
+            document.querySelectorAll('#boxListContainer > div').forEach(card => {
+                card.removeAttribute('draggable');
+                card.classList.remove('border-t-4', 'border-t-indigo-500');
+            });
+            draggedCardIndex = null;
+        };
+
+        // Canvas Interactive Drag & Resize Logic
+        window.startBoxDrag = function(e, id, mode) {
+            e.stopPropagation();
+            window.pushState();
+            window.selectBox(id, true);
+
+            isDragging = true;
+            dragMode = mode;
+            dragStartX = e.clientX;
+            dragStartY = e.clientY;
+
+            const box = canvasState.boxes.find(b => b.id === id);
+            initialBoxCoords = { ...box };
+
+            window.addEventListener('mousemove', handleBoxDrag);
+            window.addEventListener('mouseup', stopBoxDrag);
+        };
+
+        function snap16(val) {
+            if (!enableGridSnap) return val;
+            return Math.round(val / 16) * 16;
+        }
+
+        function handleBoxDrag(e) {
+            if (!isDragging || !activeBoxId) return;
+
+            const wrapper = document.getElementById('canvasWrapper');
+            const cWidth = wrapper.clientWidth;
+            const cHeight = wrapper.clientHeight;
+
+            const deltaX = e.clientX - dragStartX;
+            const deltaY = e.clientY - dragStartY;
+
+            const coordDeltaX = Math.round((deltaX / cWidth) * 1000);
+            const coordDeltaY = Math.round((deltaY / cHeight) * 1000);
+
+            const box = canvasState.boxes.find(b => b.id === activeBoxId);
+            if (!box) return;
+
+            if (dragMode === 'move') {
+                const width = initialBoxCoords.xmax - initialBoxCoords.xmin;
+                const height = initialBoxCoords.ymax - initialBoxCoords.ymin;
+
+                let rawXmin = initialBoxCoords.xmin + coordDeltaX;
+                let rawYmin = initialBoxCoords.ymin + coordDeltaY;
+
+                box.xmin = snap16(rawXmin);
+                box.ymin = snap16(rawYmin);
+                box.xmax = box.xmin + width;
+                box.ymax = box.ymin + height;
+            } else if (dragMode === 'se') {
+                box.xmax = snap16(initialBoxCoords.xmax + coordDeltaX);
+                box.ymax = snap16(initialBoxCoords.ymax + coordDeltaY);
+            } else if (dragMode === 'nw') {
+                box.xmin = snap16(initialBoxCoords.xmin + coordDeltaX);
+                box.ymin = snap16(initialBoxCoords.ymin + coordDeltaY);
+            } else if (dragMode === 'ne') {
+                box.xmax = snap16(initialBoxCoords.xmax + coordDeltaX);
+                box.ymin = snap16(initialBoxCoords.ymin + coordDeltaY);
+            } else if (dragMode === 'sw') {
+                box.xmin = snap16(initialBoxCoords.xmin + coordDeltaX);
+                box.ymax = snap16(initialBoxCoords.ymax + coordDeltaY);
+            }
+
+            window.renderCanvasBoxes();
+            window.renderBoxesList();
+            window.updateJSON();
+        }
+
+        function stopBoxDrag() {
+            isDragging = false;
+            window.removeEventListener('mousemove', handleBoxDrag);
+            window.removeEventListener('mouseup', stopBoxDrag);
+            window.checkCenterCrosshairHighlight();
+        }
+
+        // Output Copy Functions & Toast Alerts
+        window.copyJSON = function() {
+            const jsonText = document.getElementById('jsonOutput').textContent;
+            navigator.clipboard.writeText(jsonText).then(() => {
+                window.showToast("JSON schema copied to clipboard!");
+            });
+        };
+
+        window.copyNaturalLanguage = function() {
+            let paragraphs = [];
+
+            if (canvasState.summary) {
+                paragraphs.push(canvasState.summary);
+            }
+
+            canvasState.boxes.filter(b => !b.hidden).forEach(box => {
+                if (box.label === 'text' && box.text) {
+                    const resolvedText = box.text.replace(/\\n/g, '\n');
+                    paragraphs.push(`Text displaying "${resolvedText}": ${box.caption}`);
+                } else if (box.caption) {
+                    paragraphs.push(box.caption);
+                }
+            });
+
+            if (canvasState.palette.length > 0) {
+                paragraphs.push(`Palette: ${canvasState.palette.join(', ')}.`);
+            }
+
+            if (canvasState.meta.length > 0) {
+                paragraphs.push(`Meta tags: ${canvasState.meta.join(', ')}.`);
+            }
+
+            paragraphs.push(`Canvas Type: ${canvasState.canvasType}.`);
+            paragraphs.push(`Canvas dimensions: ${canvasState.width} x ${canvasState.height} px.`);
+
+            const textOutput = paragraphs.join('\n\n');
+            navigator.clipboard.writeText(textOutput).then(() => {
+                window.showToast("Text prompt copied to clipboard successfully!");
+            });
+        };
+
+        window.showToast = function(msg) {
+            const toast = document.getElementById('toast');
+            if (!toast) return;
+            document.getElementById('toastMessage').innerText = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        };
+
+        // Modal Action Control Handlers
+        window.resetAll = function() {
+            window.openResetModal();
+        };
+
+        window.openResetModal = function() {
+            const modal = document.getElementById('resetModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        };
+
+        window.closeResetModal = function() {
+            const modal = document.getElementById('resetModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        };
+
+        window.openClearCacheModalFromHelp = function() {
+            window.closeHelpModal();
+            const modal = document.getElementById('clearCacheModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        };
+
+        window.closeClearCacheModal = function() {
+            const modal = document.getElementById('clearCacheModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        };
+
+        window.confirmClearCache = function() {
+            try {
+                localStorage.removeItem(STORAGE_KEY);
+            } catch (e) {}
+            undoStack = [];
+            redoStack = [];
+            window.clearReferenceImage();
+            window.updateUndoRedoUI();
+            window.closeClearCacheModal();
+            window.showToast("Studio cache and history cleared!");
+        };
+
+        window.openExportModal = function() {
+            window.updateJSON();
+            const modal = document.getElementById('exportModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        };
+
+        window.closeExportModal = function() {
+            const modal = document.getElementById('exportModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        };
+
+        window.openHelpModal = function() {
+            const modal = document.getElementById('helpModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        };
+
+        window.closeHelpModal = function() {
+            const modal = document.getElementById('helpModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        };
+
+        window.confirmResetAll = function() {
+            window.pushState();
+            canvasState.boxes = [];
+            canvasState.summary = "";
+            canvasState.meta = ["poster"];
+            canvasState.palette = [];
+            canvasState.width = 1024;
+            canvasState.height = 1024;
+            isSmartHelperDismissed = false;
+
+            document.getElementById('sceneSummary').value = "";
+            document.getElementById('summaryPalette').value = "";
+            document.getElementById('summaryCanvas').value = "single";
+
+            currentSizeMode = 'presets';
+            currentPresetCat = 'square';
+            currentAspect = '1:1';
+            currentMp = '1.00';
+
+            window.switchTab(1);
+            window.applyStateToUI();
+            window.closeResetModal();
+            window.saveStateToLocalStorage();
+            window.showToast("Studio reset to default settings!");
+        };
+
+        window.openImportModal = function() {
+            document.getElementById('importCanvasWidth').value = canvasState.width || 1024;
+            document.getElementById('importCanvasHeight').value = canvasState.height || 1024;
+            document.getElementById('importModal').classList.remove('hidden');
+            document.getElementById('importModal').classList.add('flex');
+        };
+
+        window.closeImportModal = function() {
+            document.getElementById('importModal').classList.add('hidden');
+            document.getElementById('importModal').classList.remove('flex');
+        };
+
+        window.executeImportJSON = function() {
+            const raw = document.getElementById('importJsonInput').value;
+            const errEl = document.getElementById('importError');
+            errEl.classList.add('hidden');
+
+            try {
+                const parsed = JSON.parse(raw);
+                window.pushState();
+
+                let importedW = parseInt(document.getElementById('importCanvasWidth').value);
+                let importedH = parseInt(document.getElementById('importCanvasHeight').value);
+
+                if (importedW && importedW >= 128 && importedW <= 4096) {
+                    canvasState.width = Math.round(importedW / 16) * 16;
+                    document.getElementById('canvasWidth').value = canvasState.width;
+                }
+                if (importedH && importedH >= 128 && importedH <= 4096) {
+                    canvasState.height = Math.round(importedH / 16) * 16;
+                    document.getElementById('canvasHeight').value = canvasState.height;
+                }
+
+                // Check if target imported dimensions match an exact aspect + MP preset combination
+                const presetMatch = window.findPresetForDimensions(canvasState.width, canvasState.height);
+                if (presetMatch.found) {
+                    currentPresetCat = presetMatch.category;
+                    currentAspect = presetMatch.aspect;
+                    currentMp = presetMatch.mp;
+
+                    const catRadio = document.querySelector(`input[name="presetCat"][value="${presetMatch.category}"]`);
+                    if (catRadio) catRadio.checked = true;
+
+                    window.renderAspectGrid();
+                    window.handleSizeModeChange('presets');
+                } else {
+                    window.handleSizeModeChange('custom');
+                }
+
+                window.updateCanvasDimensions();
+
+                canvasState.palette = [];
+                document.getElementById('summaryPalette').value = "";
+
+                const summaryObj = parsed.summary && typeof parsed.summary === 'object' ? parsed.summary : null;
+
+                if (summaryObj) {
+                    if (summaryObj.caption !== undefined) {
+                        canvasState.summary = summaryObj.caption;
+                        document.getElementById('sceneSummary').value = summaryObj.caption;
+                    }
+                    if (Array.isArray(summaryObj.meta)) {
+                        canvasState.meta = summaryObj.meta;
+                    }
+                    if (summaryObj.canvas) {
+                        canvasState.canvasType = summaryObj.canvas;
+                        document.getElementById('summaryCanvas').value = summaryObj.canvas;
+                    }
+                    if (Array.isArray(summaryObj.palette)) {
+                        canvasState.palette = summaryObj.palette;
+                        document.getElementById('summaryPalette').value = summaryObj.palette.join(', ');
+                    }
+                } else if (typeof parsed.summary === 'string') {
+                    canvasState.summary = parsed.summary;
+                    document.getElementById('sceneSummary').value = parsed.summary;
+                    if (Array.isArray(parsed.meta)) canvasState.meta = parsed.meta;
+                    if (parsed.canvas) {
+                        canvasState.canvasType = parsed.canvas;
+                        document.getElementById('summaryCanvas').value = parsed.canvas;
+                    }
+                    if (Array.isArray(parsed.palette)) {
+                        canvasState.palette = parsed.palette;
+                        document.getElementById('summaryPalette').value = parsed.palette.join(', ');
+                    }
+                }
+
+                if (Array.isArray(parsed.items)) {
+                    canvasState.boxes = parsed.items.map((item, idx) => ({
+                        id: 'box_' + Date.now() + '_' + idx,
+                        label: item.label || 'object',
+                        text: item.text || '',
+                        caption: item.caption || '',
+                        ymin: Array.isArray(item.bbox) ? item.bbox[0] : -200,
+                        xmin: Array.isArray(item.bbox) ? item.bbox[1] : -250,
+                        ymax: Array.isArray(item.bbox) ? item.bbox[2] : 200,
+                        xmax: Array.isArray(item.bbox) ? item.bbox[3] : 250
+                    }));
+                }
+                window.renderAll();
+                window.closeImportModal();
+                if (canvasState.boxes.length > 0) window.switchTab(2);
+                window.saveStateToLocalStorage();
+                window.showToast("JSON imported successfully!");
+            } catch (err) {
+                errEl.innerText = "Invalid JSON syntax. Please check formatting.";
+                errEl.classList.remove('hidden');
+            }
+        };
+
+        // Keyboard Shortcuts Handler
+        window.addEventListener('keydown', function(e) {
+            const isTyping = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName);
+
+            if (e.key === 'Escape') {
+                window.closeImportModal();
+                window.closeExportModal();
+                window.closeResetModal();
+                window.closeClearCacheModal();
+                window.closeHelpModal();
+                window.deselectAllBoxes();
+                return;
+            }
+
+            if (!isTyping) {
+                if (e.key === 'Delete' || e.key === 'Backspace') {
+                    if (activeBoxId) {
+                        e.preventDefault();
+                        window.deleteBox(activeBoxId);
+                    }
+                } else if (e.key === 'Tab') {
+                    if (canvasState.boxes.length > 0) {
+                        e.preventDefault();
+                        const currIdx = canvasState.boxes.findIndex(b => b.id === activeBoxId);
+                        let nextIdx = e.shiftKey ? currIdx - 1 : currIdx + 1;
+                        if (nextIdx < 0) nextIdx = canvasState.boxes.length - 1;
+                        if (nextIdx >= canvasState.boxes.length) nextIdx = 0;
+                        window.selectBox(canvasState.boxes[nextIdx].id, false);
+                    }
+                } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'd') {
+                    e.preventDefault();
+                    window.duplicateSelectedBox();
+                } else if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                    if (activeBoxId) {
+                        const box = canvasState.boxes.find(b => b.id === activeBoxId);
+                        if (box) {
+                            e.preventDefault();
+                            window.pushState();
+                            const step = e.shiftKey ? 50 : 10;
+                            if (e.altKey) {
+                                if (e.key === 'ArrowRight') box.xmax = Math.min(500, box.xmax + step);
+                                if (e.key === 'ArrowLeft') box.xmax = Math.max(box.xmin + 10, box.xmax - step);
+                                if (e.key === 'ArrowDown') box.ymax = Math.min(500, box.ymax + step);
+                                if (e.key === 'ArrowUp') box.ymax = Math.max(box.ymin + 10, box.ymax - step);
+                            } else {
+                                if (e.key === 'ArrowRight') { box.xmin += step; box.xmax += step; }
+                                if (e.key === 'ArrowLeft') { box.xmin -= step; box.xmax -= step; }
+                                if (e.key === 'ArrowDown') { box.ymin += step; box.ymax += step; }
+                                if (e.key === 'ArrowUp') { box.ymin -= step; box.ymax -= step; }
+                            }
+                            window.renderCanvasBoxes();
+                            window.renderBoxesList();
+                            window.updateJSON();
+                        }
+                    }
+                }
+            }
+
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
+                if (e.shiftKey) {
+                    e.preventDefault();
+                    window.redo();
+                } else {
+                    e.preventDefault();
+                    window.undo();
+                }
+            } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'y') {
+                e.preventDefault();
+                window.redo();
+            }
+
+            if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'c') {
+                e.preventDefault();
+                window.copyJSON();
+            } else if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'n') {
+                e.preventDefault();
+                window.copyNaturalLanguage();
+            } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'i') {
+                e.preventDefault();
+                window.openImportModal();
+            }
+        });
+
+        // Sidebar Resizer & Layout Observers
+        function initResizers() {
+            const sidebar = document.getElementById('sidebarCol');
+            const workspace = document.getElementById('workspaceContainer');
+            const resizerV = document.getElementById('resizer');
+            const resizerH = document.getElementById('workspaceResizerH');
+
+            let isResizingV = false;
+            let isResizingH = false;
+            let startY = 0;
+            let startH = 0;
+
+            function startHResize(clientY) {
+                if (window.innerWidth < 992 && workspace) {
+                    isResizingH = true;
+                    startY = clientY;
+                    startH = workspace.getBoundingClientRect().height;
+                    document.body.style.cursor = 'row-resize';
+                    document.body.classList.add('select-none');
+                }
+            }
+
+            // Desktop Vertical Sidebar Resizer (Width)
+            if (resizerV) {
+                resizerV.addEventListener('mousedown', (e) => {
+                    if (window.innerWidth >= 992) {
+                        e.preventDefault();
+                        isResizingV = true;
+                        document.body.style.cursor = 'col-resize';
+                        document.body.classList.add('select-none');
+                    }
+                });
+            }
+
+            // Mobile/Stacked Horizontal Workspace Resizer (Height)
+            if (resizerH) {
+                resizerH.addEventListener('mousedown', (e) => {
+                    e.preventDefault();
+                    startHResize(e.clientY);
+                });
+
+                resizerH.addEventListener('touchstart', (e) => {
+                    if (e.touches.length > 0) {
+                        startHResize(e.touches[0].clientY);
+                    }
+                }, { passive: true });
+            }
+
+            function handleMove(clientY, clientX) {
+                if (window.innerWidth >= 992 && isResizingV) {
+                    const newW = Math.max(260, Math.min(650, clientX));
+                    sidebar.style.width = `${newW}px`;
+                    window.updateCanvasDimensions();
+                } else if (window.innerWidth < 992 && isResizingH && workspace) {
+                    const deltaY = clientY - startY;
+                    const newH = Math.max(250, Math.min(1000, startH + deltaY));
+                    workspace.style.height = `${newH}px`;
+                    workspace.style.flex = 'none';
+                    window.updateCanvasDimensions();
+                }
+            }
+
+            window.addEventListener('mousemove', (e) => {
+                if (isResizingV || isResizingH) {
+                    e.preventDefault();
+                    handleMove(e.clientY, e.clientX);
+                }
+            });
+
+            window.addEventListener('touchmove', (e) => {
+                if (isResizingH && e.touches.length > 0) {
+                    handleMove(e.touches[0].clientY, e.touches[0].clientX);
+                }
+            }, { passive: true });
+
+            function stopResize() {
+                if (isResizingV || isResizingH) {
+                    isResizingV = false;
+                    isResizingH = false;
+                    document.body.style.cursor = 'default';
+                    document.body.classList.remove('select-none');
+                    window.updateCanvasDimensions();
+                }
+            }
+
+            window.addEventListener('mouseup', stopResize);
+            window.addEventListener('touchend', stopResize);
+
+            window.addEventListener('resize', () => {
+                if (window.innerWidth >= 992) {
+                    // Reinstate full-width desktop multi-column view
+                    sidebar.style.width = '24rem'; // default w-96
+                    workspace.style.height = '';  // clear manual height overrides
+                    workspace.style.flex = '';
+                } else {
+                    sidebar.style.width = '100%';
+                }
+                window.updateCanvasDimensions();
+            });
+        }
+
+        const resizeObserver = new ResizeObserver(() => {
+            window.requestAnimationFrame(() => {
+                window.updateCanvasDimensions();
+            });
+        });
+
+        // Application Initialization Entry Point
+        window.onload = function() {
+            window.loadStateFromLocalStorage();
+
+            const widthEl = document.getElementById('canvasWidth');
+            const heightEl = document.getElementById('canvasHeight');
+            if (widthEl) widthEl.value = canvasState.width || 1024;
+            if (heightEl) heightEl.value = canvasState.height || 1024;
+
+            window.applyStateToUI();
+            initResizers();
+
+            const viewport = document.getElementById('viewportArea');
+            if (viewport) resizeObserver.observe(viewport);
+
+            if (canvasState.boxes && canvasState.boxes.length > 0) {
+                window.switchTab(2);
+            } else {
+                window.switchTab(1);
+            }
+
+            window.initIcons();
+        };
+    </script>
+</body>
+</html>
