@@ -237,7 +237,7 @@ README.md                             Project documentation & feature guides
 
 ## Feedback & support
 
-Encountered a bug or have a feature request? [Report an issue here on GitHub](./issues). If you don't have a GitHub account, leave a comment on the Civitai article : [Civitai.red](https://civitai.red/articles/38547/moss-image-layouts-made-easy-with-the-free-layout-studio-app) / [Civitai.com](https://civitai.com/articles/38547/moss-image-layouts-made-easy-with-the-free-layout-studio-app).
+Encountered a bug or have a feature request? [Report an issue here on GitHub](https://github.com/Rexoplanets/layout-studio-moss-image/issues). If you don't have a GitHub account, leave a comment on the Civitai article : [Civitai.red](https://civitai.red/articles/38547/moss-image-layouts-made-easy-with-the-free-layout-studio-app) / [Civitai.com](https://civitai.com/articles/38547/moss-image-layouts-made-easy-with-the-free-layout-studio-app).
 
 ---
 
