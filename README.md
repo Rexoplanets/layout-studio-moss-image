@@ -28,6 +28,7 @@ Take the guesswork out of creating bounding-box layouts for [MOSS-Image](https:/
   - [Additional Features](#additional-features-include)
 - [Caveats & Hints](#caveats--hints)
 - [Getting Started](#getting-started)
+- [Feedback & Support](#feedback--support)
 - [File Structure](#file-structure)
 - [License](#license)
 - [About MOSS-Image](#about-moss-image)
