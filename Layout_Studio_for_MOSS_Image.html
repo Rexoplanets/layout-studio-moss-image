@@ -142,7 +142,7 @@
             <div>
                 <h1 class="text-sm font-bold text-white tracking-wide flex items-center gap-2">
                     The Layout Studio for MOSS-Image
-                    <span class="text-[0.625rem] px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-semibold">v1.0.0</span><span class="text-[0.625rem]">by ℝ𝕖𝕩𝕠</span>
+                    <span class="text-[0.625rem] px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-semibold">v1.1.0</span><span class="text-[0.625rem]">by ℝ𝕖𝕩𝕠</span>
                 </h1>
                 <p class="text-xs text-slate-400">Visual bounding box constructor for <a href="https://github.com/OpenMOSS/MOSS-Image/tree/main" target="_blank" rel="noopener noreferrer" class="text-amber-400 underline hover:text-amber-300">MOSS-Image</a></p>
             </div>
@@ -434,7 +434,7 @@
                     <label class="block text-[0.625rem] font-semibold text-slate-400 mb-1">Palette values (optional, comma-separated)</label>
                     <input type="text" id="summaryPalette" oninput="handleUserInput()" placeholder="e.g. #FF5733, deep teal, matte black, synthwave neon" class="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
                     <p class="text-[0.5625rem] text-slate-400 leading-tight mt-1.5">
-                        As noted in the <a href="https://github.com/OpenMOSS/MOSS-Image/blob/main/skills/moss-image-prompt-enhancer/references/layout.md" target="_blank" title="View more Palette suggestions" class="hover:text-amber-300 underline flex items-center gap-1 inline-flex">OpenMOSS docs</a>: "Use only when they contribute useful visual information". Accepts hex color codes (e.g., <code class="text-slate-300 font-mono">#FF5733</code>, <code class="text-slate-300 font-mono">#C70039</code>, <code class="text-slate-300 font-mono">#900C3F</code>), color names (e.g., <code class="text-slate-300 font-mono">crimson</code>), tones (<code class="text-slate-300 font-mono">pastel-colors</code>, <code class="text-slate-300 font-mono">jewel-toned</code>, <code class="text-slate-300 font-mono">muted desaturated</code> ...), and lighting (for realistic) (e.g., <code class="text-slate-300 font-mono">flash lighting</code>, <code class="text-slate-300 font-mono">cinematic lighting</code>...). <a href="./assets/moss-image-meta-tag-palette-suggestions.html" target="_blank" title="View more Palette suggestions" class="hover:text-amber-300 underline flex items-center gap-1 inline-flex"><span>More Palette suggestions</span> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="external-link" aria-hidden="true" class="lucide lucide-external-link w-2.5 h-2.5 inline-block"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg></a>
+                        As noted in the <a href="https://github.com/OpenMOSS/MOSS-Image/blob/main/skills/moss-image-prompt-enhancer/references/layout.md" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-amber-300 underline">OpenMOSS docs</a>: "Use only when they contribute useful visual information". Accepts hex color codes (e.g., <code class="text-slate-300 font-mono">#FF5733</code>, <code class="text-slate-300 font-mono">#C70039</code>, <code class="text-slate-300 font-mono">#900C3F</code>), color names (e.g., <code class="text-slate-300 font-mono">crimson</code>), tones (<code class="text-slate-300 font-mono">pastel-colors</code>, <code class="text-slate-300 font-mono">jewel-toned</code>, <code class="text-slate-300 font-mono">muted desaturated</code> ...), and lighting (for realistic) (e.g., <code class="text-slate-300 font-mono">flash lighting</code>, <code class="text-slate-300 font-mono">cinematic lighting</code>...). <a href="./assets/moss-image-meta-tag-palette-suggestions.html" target="_blank" title="View more Palette suggestions" class="hover:text-amber-300 underline flex items-center gap-1 inline-flex"><span>More Palette suggestions</span> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="external-link" aria-hidden="true" class="lucide lucide-external-link w-2.5 h-2.5 inline-block"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg></a>
                     </p>
                     <div class="text-[0.5625rem] text-amber-400/90 flex items-center gap-1 mt-2">
                         <i data-lucide="info" class="w-3 h-3 shrink-0"></i> Palette values and Meta Tags will be overridden by any conflicting values in the Global Scene Summary or Item Captions/Prompts, which have priority.
@@ -442,10 +442,10 @@
                 </div>
 
                 <!-- Subtle License & Disclaimer Footer -->
-                <div style="text-align:center;" class="px-4 py-2 bg-slate-950 border-t border-slate-800/80 text-[0.5625rem] text-slate-500 flex flex-col gap-0.5 shrink-0 mt-auto">
+                <div class="px-4 py-2 bg-slate-950 border-t border-slate-800/80 text-[0.5625rem] text-slate-500 flex flex-col gap-0.5 shrink-0 mt-auto text-center">
                     <div>Released open-source under the <a href="https://www.gnu.org/licenses/gpl-3.0.html#license-text" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-slate-300 underline">GNU GPL v3 Licence</a>.</div>
                     <div class="text-slate-500/80">Independent tool • Not affiliated with OpenMOSS. <a href="https://github.com/Rexoplanets/layout-studio-moss-image" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-slate-300 underline inline-flex items-center gap-0.5">View on GitHub <i data-lucide="external-link" class="w-2.5 h-2.5 inline"></i></a></div>
-                    <div class="text-slate-400/90 pt-0.5">If you find this tool useful, feel free to tip me some Buzz on Civitai: ⚡️&nbsp;<a href="https://civitai.red/articles/38547/moss-image-layouts-made-easy-with-the-free-layout-studio" target="_blank" rel="noopener noreferrer" class="text-amber-400 hover:text-amber-300 underline">Civitai.red</a> / <a href="https://civitai.com/articles/38547/moss-image-layouts-made-easy-with-the-free-layout-studio" target="_blank" rel="noopener noreferrer" class="text-amber-400 hover:text-amber-300 underline">Civitai.com</a>&nbsp;⚡️</div>
+                    <div class="text-slate-400/90 pt-0.5">If you find this tool useful, feel free to tip me some Buzz on Civitai:<br/>⚡️ <a href="https://civitai.red/models/3051607/the-layout-studio-for-moss-image-draw-your-bbox-prompt-then-paste-the-json-in-any-generator" target="_blank" rel="noopener noreferrer" class="text-amber-400 hover:text-amber-300 underline">Civitai.red</a> / <a href="https://civitai.com/models/3051607/the-layout-studio-for-moss-image-draw-your-bbox-prompt-then-paste-the-json-in-any-generator" target="_blank" rel="noopener noreferrer" class="text-amber-400 hover:text-amber-300 underline">Civitai.com</a> ⚡️</div>
                 </div>
             </div>
 
@@ -500,6 +500,22 @@
     <div id="toast" class="fixed bottom-6 right-6 bg-slate-800 text-white px-4 py-3 rounded-xl shadow-2xl border border-slate-700 flex items-center gap-2.5 text-xs font-medium translate-y-20 opacity-0 transition-all duration-300 z-50">
         <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
         <span id="toastMessage">JSON copied to clipboard successfully!</span>
+    </div>
+
+    <!-- Reference Image Metadata Detection Banner -->
+    <div id="refMetadataBanner" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-2xl border border-indigo-500/70 hidden items-center gap-3 text-xs font-medium z-50">
+        <div class="flex items-center gap-2 text-indigo-300">
+            <i data-lucide="sparkles" class="w-4 h-4 text-amber-400 shrink-0"></i>
+            <span>MOSS-Image layout detected in PNG! Import layout?</span>
+        </div>
+        <div class="flex items-center gap-1.5 shrink-0">
+            <button type="button" onclick="confirmImportFromRefPng()" class="px-3 py-1.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg transition shadow">
+                Import Layout
+            </button>
+            <button type="button" onclick="dismissRefMetadataBanner()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition" title="Dismiss">
+                <i data-lucide="x" class="w-3.5 h-3.5"></i>
+            </button>
+        </div>
     </div>
 
     <!-- Reset Confirmation Modal -->
@@ -637,7 +653,28 @@
                     <i data-lucide="x" class="w-4 h-4"></i>
                 </button>
             </div>
-            <div class="p-6 space-y-4">
+            <div class="p-6 space-y-4 max-h-[75vh] overflow-y-auto custom-scrollbar">
+                <!-- Load from PNG Metadata Section -->
+                <div class="bg-indigo-950/40 border border-indigo-700/50 rounded-xl p-3.5 space-y-2.5">
+                    <div class="flex items-center justify-between gap-2 flex-wrap">
+                        <div>
+                            <label class="block text-xs font-bold text-indigo-200 flex items-center gap-1.5">
+                                <i data-lucide="image" class="w-3.5 h-3.5 text-indigo-400"></i> Import directly from a PNG image
+                            </label>
+                            <p class="text-[0.6875rem] text-slate-400 mt-0.5">Extracts dimensions and embedded MOSS-Image JSON metadata (ComfyUI, Civitai, etc.).</p>
+                        </div>
+                        <button type="button" onclick="triggerImportPngSelect()" class="px-3 py-1.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg transition shadow flex items-center gap-1.5 shrink-0">
+                            <i data-lucide="upload" class="w-3.5 h-3.5"></i> Select PNG File
+                        </button>
+                        <input type="file" id="importPngInput" accept="image/png" onchange="handleImportPngUpload(event)" class="hidden">
+                    </div>
+                    <label class="inline-flex items-center gap-2 text-[0.6875rem] text-slate-300 cursor-pointer pt-0.5">
+                        <input type="checkbox" id="importPngAsRefCheckbox" checked class="rounded border-slate-700 bg-slate-900 text-indigo-600 focus:ring-indigo-500">
+                        Also load PNG as Reference Background Image
+                    </label>
+                    <p id="importPngStatus" class="text-[0.6875rem] text-emerald-400 hidden"></p>
+                </div>
+
                 <div class="bg-slate-950/60 border border-slate-800 rounded-xl p-3.5 space-y-2">
                     <label class="block text-xs font-bold text-slate-200">Import image dimensions (optional)</label>
                     <p class="text-[0.6875rem] text-slate-400 leading-relaxed">Before importing, it's best to <span class="text-amber-400">first resize the canvas' width and height</span> to those of the existing image, <em>then</em> paste your MOSS-Image JSON below.</p>
@@ -696,6 +733,9 @@
 
         let activeMetaTab = 1; // 1: Natural Language, 2: Anime
         let isSmartHelperDismissed = false;
+        let pendingPngRefDataUrl = null;
+        let pendingRefMetadataLayout = null;
+        let refMetadataBannerTimeout = null;
 
         // Aspect Ratio Presets Tables Data
         const PRESET_TABLES = {
@@ -860,30 +900,98 @@
         };
 
         // Reference Background Image Engine
-        window.triggerReferenceImageSelect = function() {
-            const fileInput = document.getElementById('refFileInput');
-            if (fileInput) fileInput.click();
+        window.applyReferenceImageDataUrl = function(dataUrl) {
+            const imgEl = document.getElementById('refBgImage');
+            const toolbar = document.getElementById('refImgToolbar');
+            if (imgEl) {
+                imgEl.src = dataUrl;
+                imgEl.classList.remove('hidden');
+            }
+            if (toolbar) {
+                toolbar.classList.remove('hidden');
+                toolbar.classList.add('flex');
+            }
         };
 
-        window.handleReferenceImageUpload = function(event) {
+        window.triggerReferenceImageSelect = function() {
+            const fileInput = document.getElementById('refFileInput');
+            if (fileInput) {
+                fileInput.value = '';
+                fileInput.click();
+            }
+        };
+
+        window.showRefMetadataBanner = function(width, height, extractedJson) {
+            pendingRefMetadataLayout = { width, height, extractedJson };
+            const banner = document.getElementById('refMetadataBanner');
+            if (banner) {
+                banner.classList.remove('hidden');
+                banner.classList.add('flex');
+                window.initIcons();
+            }
+            if (refMetadataBannerTimeout) {
+                clearTimeout(refMetadataBannerTimeout);
+            }
+            refMetadataBannerTimeout = setTimeout(() => {
+                window.dismissRefMetadataBanner();
+            }, 12000);
+        };
+
+        window.dismissRefMetadataBanner = function() {
+            const banner = document.getElementById('refMetadataBanner');
+            if (banner) {
+                banner.classList.add('hidden');
+                banner.classList.remove('flex');
+            }
+            if (refMetadataBannerTimeout) {
+                clearTimeout(refMetadataBannerTimeout);
+                refMetadataBannerTimeout = null;
+            }
+        };
+
+        window.confirmImportFromRefPng = function() {
+            if (!pendingRefMetadataLayout || !pendingRefMetadataLayout.extractedJson) return;
+            const { width, height, extractedJson } = pendingRefMetadataLayout;
+
+            const wEl = document.getElementById('importCanvasWidth');
+            const hEl = document.getElementById('importCanvasHeight');
+            const jsonEl = document.getElementById('importJsonInput');
+
+            if (wEl && width) wEl.value = Math.max(128, Math.min(4096, Math.round(width / 16) * 16));
+            if (hEl && height) hEl.value = Math.max(128, Math.min(4096, Math.round(height / 16) * 16));
+            if (jsonEl) jsonEl.value = extractedJson;
+
+            // Keep the already loaded reference background image untouched
+            pendingPngRefDataUrl = null;
+            pendingRefMetadataLayout = null;
+            window.dismissRefMetadataBanner();
+            window.executeImportJSON();
+        };
+
+        window.handleReferenceImageUpload = async function(event) {
             const file = event.target.files[0];
             if (!file) return;
 
             const reader = new FileReader();
             reader.onload = function(e) {
-                const imgEl = document.getElementById('refBgImage');
-                const toolbar = document.getElementById('refImgToolbar');
-                if (imgEl) {
-                    imgEl.src = e.target.result;
-                    imgEl.classList.remove('hidden');
-                }
-                if (toolbar) {
-                    toolbar.classList.remove('hidden');
-                    toolbar.classList.add('flex');
-                }
+                window.applyReferenceImageDataUrl(e.target.result);
                 window.showToast("Reference background image inserted!");
             };
             reader.readAsDataURL(file);
+
+            // Check if PNG contains embedded MOSS-Image layout metadata
+            const isPng = file.type === 'image/png' || file.name.toLowerCase().endsWith('.png');
+            if (isPng) {
+                try {
+                    const buffer = await file.arrayBuffer();
+                    const { width, height, extractedJson } = await window.parsePngChunksAndMetadata(buffer);
+                    if (extractedJson) {
+                        window.showRefMetadataBanner(width, height, extractedJson);
+                    }
+                } catch (e) {
+                    // Silently ignore non-MOSS PNGs when inserting as reference image
+                }
+            }
         };
 
         window.updateRefOpacity = function(val) {
@@ -907,7 +1015,524 @@
                 toolbar.classList.remove('flex');
             }
             if (fileInput) fileInput.value = '';
+            window.dismissRefMetadataBanner();
             window.showToast("Reference image removed.");
+        };
+
+        // PNG Metadata Extraction & Brace-Counting Scanner Engine
+        window.triggerImportPngSelect = function() {
+            const input = document.getElementById('importPngInput');
+            if (input) {
+                input.value = '';
+                input.click();
+            }
+        };
+
+        // Decode raw PNG text/EXIF chunk bytes with UTF-16LE / UTF-16BE / UNICODE prefix awareness (Civitai Online Generator & ComfyUI)
+        window.decodePngChunkBytes = function(bytes) {
+            if (!bytes || bytes.length === 0) return '';
+
+            let payload = bytes;
+            let forcedEncoding = null;
+
+            // Check for EXIF/Civitai "UNICODE\0" 8-byte header (55 4E 49 43 4F 44 45 00)
+            if (
+                payload.length >= 8 &&
+                payload[0] === 0x55 && payload[1] === 0x4E && payload[2] === 0x49 && payload[3] === 0x43 &&
+                payload[4] === 0x4F && payload[5] === 0x44 && payload[6] === 0x45 && payload[7] === 0x00
+            ) {
+                payload = payload.subarray(8);
+                forcedEncoding = 'utf-16';
+            }
+
+            // Check for UTF-16 BOM (FF FE = LE, FE FF = BE)
+            if (payload.length >= 2) {
+                if (payload[0] === 0xFF && payload[1] === 0xFE) {
+                    payload = payload.subarray(2);
+                    forcedEncoding = 'utf-16le';
+                } else if (payload[0] === 0xFE && payload[1] === 0xFF) {
+                    payload = payload.subarray(2);
+                    forcedEncoding = 'utf-16be';
+                }
+            }
+
+            // Detect interleaved \x00 bytes indicative of UTF-16LE or UTF-16BE
+            if (!forcedEncoding || forcedEncoding === 'utf-16') {
+                const sampleLen = Math.min(payload.length, 200);
+                let evenNulls = 0;
+                let oddNulls = 0;
+                for (let i = 0; i < sampleLen; i++) {
+                    if (payload[i] === 0x00) {
+                        if (i % 2 === 0) evenNulls++;
+                        else oddNulls++;
+                    }
+                }
+                if (oddNulls > sampleLen * 0.25 && evenNulls < sampleLen * 0.1) {
+                    forcedEncoding = 'utf-16le';
+                } else if (evenNulls > sampleLen * 0.25 && oddNulls < sampleLen * 0.1) {
+                    forcedEncoding = 'utf-16be';
+                }
+            }
+
+            if (forcedEncoding === 'utf-16le' || forcedEncoding === 'utf-16be') {
+                const evenLen = payload.length - (payload.length % 2);
+                const aligned = payload.slice(0, evenLen);
+                try {
+                    return new TextDecoder(forcedEncoding).decode(aligned);
+                } catch (e) {}
+            }
+
+            // Default UTF-8 decode, stripping any stray null characters
+            const decoded = new TextDecoder('utf-8', { fatal: false }).decode(payload);
+            return decoded.replace(/\u0000/g, '');
+        };
+
+        // Parse EXIF TIFF directory inside PNG eXIf chunk (used by Civitai Online Generator UserComment)
+        window.extractExifStrings = function(exifBytes) {
+            const results = [];
+            if (!exifBytes || exifBytes.length < 8) return results;
+
+            // Some PNG eXIf chunks start with "Exif\0\0" before the TIFF header ("II" or "MM")
+            let tiffOffset = 0;
+            if (
+                exifBytes[0] === 0x45 && exifBytes[1] === 0x78 && exifBytes[2] === 0x69 &&
+                exifBytes[3] === 0x66 && exifBytes[4] === 0x00 && exifBytes[5] === 0x00
+            ) {
+                tiffOffset = 6;
+            }
+
+            if (tiffOffset + 8 > exifBytes.length) return results;
+
+            const isLittleEndian = (exifBytes[tiffOffset] === 0x49 && exifBytes[tiffOffset + 1] === 0x49);
+            const isBigEndian = (exifBytes[tiffOffset] === 0x4D && exifBytes[tiffOffset + 1] === 0x4D);
+
+            // Always decode the whole EXIF buffer as fallback (with UTF-16 & UTF-8)
+            results.push(window.decodePngChunkBytes(exifBytes));
+
+            if (!isLittleEndian && !isBigEndian) return results;
+
+            const view = new DataView(exifBytes.buffer, exifBytes.byteOffset + tiffOffset, exifBytes.byteLength - tiffOffset);
+            const firstIfdOffset = view.getUint32(4, isLittleEndian);
+
+            const visitedIfds = new Set();
+            const scanIfd = (ifdPos) => {
+                if (ifdPos <= 0 || ifdPos + 2 > view.byteLength || visitedIfds.has(ifdPos)) return;
+                visitedIfds.add(ifdPos);
+
+                const numEntries = view.getUint16(ifdPos, isLittleEndian);
+                for (let i = 0; i < numEntries; i++) {
+                    const entryPos = ifdPos + 2 + i * 12;
+                    if (entryPos + 12 > view.byteLength) break;
+
+                    const tag = view.getUint16(entryPos, isLittleEndian);
+                    const type = view.getUint16(entryPos + 2, isLittleEndian);
+                    const count = view.getUint32(entryPos + 4, isLittleEndian);
+                    const valOrOffset = view.getUint32(entryPos + 8, isLittleEndian);
+
+                    // ExifIFDPointer (0x8769)
+                    if (tag === 0x8769 && count === 1) {
+                        scanIfd(valOrOffset);
+                        continue;
+                    }
+
+                    // Compute byte size for ASCII (2), BYTE (1), UNDEFINED (7)
+                    if ((type === 1 || type === 2 || type === 7) && count > 4) {
+                        if (valOrOffset + count <= view.byteLength) {
+                            const fieldSlice = exifBytes.subarray(tiffOffset + valOrOffset, tiffOffset + valOrOffset + count);
+                            results.push(window.decodePngChunkBytes(fieldSlice));
+                        }
+                    }
+                }
+
+                const nextIfdPosOffset = ifdPos + 2 + numEntries * 12;
+                if (nextIfdPosOffset + 4 <= view.byteLength) {
+                    const nextIfd = view.getUint32(nextIfdPosOffset, isLittleEndian);
+                    if (nextIfd > 0) scanIfd(nextIfd);
+                }
+            };
+
+            scanIfd(firstIfdOffset);
+            return results;
+        };
+
+        window.extractMossJsonFromText = function(rawText) {
+            if (!rawText) return null;
+
+            // Build candidate search strings: raw text and progressively unescaped variants
+            // (Handles ComfyUI workflow JSON strings AND Civitai JSON-wrapped prompt metadata)
+            const candidates = [rawText];
+
+            // Check if the chunk itself is a JSON wrapper (e.g., Civitai metadata or ComfyUI prompt graph)
+            const recursivelyCollectStrings = (obj, depth = 0) => {
+                if (depth > 8 || obj == null) return;
+                if (typeof obj === 'string') {
+                    if (obj.includes('summary') && obj.includes('caption')) {
+                        candidates.push(obj);
+                    }
+                    const trimmed = obj.trim();
+                    if ((trimmed.startsWith('{') && trimmed.endsWith('}')) || (trimmed.startsWith('[') && trimmed.endsWith(']'))) {
+                        try {
+                            const inner = JSON.parse(trimmed);
+                            recursivelyCollectStrings(inner, depth + 1);
+                        } catch (e) {}
+                    }
+                } else if (Array.isArray(obj)) {
+                    for (const item of obj) recursivelyCollectStrings(item, depth + 1);
+                } else if (typeof obj === 'object') {
+                    if (obj.summary && typeof obj.summary.caption === 'string') {
+                        candidates.unshift(JSON.stringify(obj));
+                    }
+                    for (const val of Object.values(obj)) {
+                        recursivelyCollectStrings(val, depth + 1);
+                    }
+                }
+            };
+
+            // Try parsing the entire chunk or embedded JSON objects (e.g., Civitai `{"prompt": "{...}"}`)
+            const trimmedRaw = rawText.trim();
+            if (trimmedRaw.startsWith('{') || trimmedRaw.startsWith('[')) {
+                try {
+                    recursivelyCollectStrings(JSON.parse(trimmedRaw));
+                } catch (e) {}
+            }
+
+            // Also build unescaped string variants for ComfyUI / Civitai escaped JSON payloads
+            try {
+                const unescapedOnce = rawText
+                    .replace(/\\\\/g, '\\')
+                    .replace(/\\"/g, '"')
+                    .replace(/\\n/g, '\n')
+                    .replace(/\\r/g, '\r')
+                    .replace(/\\t/g, '\t');
+                if (unescapedOnce !== rawText) {
+                    candidates.push(unescapedOnce);
+                    const unescapedTwice = unescapedOnce
+                        .replace(/\\\\/g, '\\')
+                        .replace(/\\"/g, '"');
+                    if (unescapedTwice !== unescapedOnce) {
+                        candidates.push(unescapedTwice);
+                    }
+                }
+            } catch (e) {}
+
+            // 1. Standard JSON pass: Regex matching '{ "summary": { "caption":' with arbitrary whitespace
+            const startPattern = /\{\s*"summary"\s*:\s*\{\s*"caption"\s*:/g;
+
+            for (const text of candidates) {
+                if (!text || typeof text !== 'string') continue;
+                startPattern.lastIndex = 0;
+                let match;
+                while ((match = startPattern.exec(text)) !== null) {
+                    const startIdx = match.index;
+                    let depth = 0;
+                    let inString = false;
+                    let isEscaped = false;
+
+                    for (let i = startIdx; i < text.length; i++) {
+                        const ch = text[i];
+
+                        if (isEscaped) {
+                            isEscaped = false;
+                            continue;
+                        }
+
+                        if (ch === '\\' && inString) {
+                            isEscaped = true;
+                            continue;
+                        }
+
+                        if (ch === '"') {
+                            inString = !inString;
+                            continue;
+                        }
+
+                        if (!inString) {
+                            if (ch === '{') {
+                                depth++;
+                            } else if (ch === '}') {
+                                depth--;
+                                if (depth === 0) {
+                                    const candidateSlice = text.slice(startIdx, i + 1);
+                                    try {
+                                        const parsed = JSON.parse(candidateSlice);
+                                        if (parsed && parsed.summary && typeof parsed.summary.caption === 'string') {
+                                            return JSON.stringify(parsed, null, 2);
+                                        }
+                                    } catch (parseErr) {
+                                        // Continue searching if this candidate was malformed
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // 2. Fallback pass for Civitai-stripped braces (where `{` and `}` were stripped by Civitai's wildcard parser)
+            for (const text of candidates) {
+                if (!text || typeof text !== 'string') continue;
+                const reconstructed = window.reconstructBraceStrippedMossJson(text);
+                if (reconstructed) {
+                    return JSON.stringify(reconstructed, null, 2);
+                }
+            }
+
+            return null;
+        };
+
+        // Reconstruct valid MOSS-Image JSON when Civitai's prompt parser strips `{` and `}` characters
+        window.reconstructBraceStrippedMossJson = function(text) {
+            if (!text || typeof text !== 'string') return null;
+
+            const summaryMatch = text.match(/"summary"\s*:\s*\{?\s*"caption"\s*:/);
+            if (!summaryMatch) return null;
+
+            let slice = text.slice(summaryMatch.index);
+
+            // Trim trailing ComfyUI JSON node keys if present (e.g., `, "clip": ["62", 0]`)
+            const endMarkerMatch = slice.match(/"bbox_format"\s*:\s*"[^"]*"/);
+            if (endMarkerMatch) {
+                slice = slice.slice(0, endMarkerMatch.index + endMarkerMatch[0].length);
+            } else {
+                const itemsEndIdx = slice.indexOf('"items"');
+                if (itemsEndIdx !== -1) {
+                    // Find matching closing bracket `]` for `"items": [...]`
+                    const bracketStart = slice.indexOf('[', itemsEndIdx);
+                    if (bracketStart !== -1) {
+                        let bDepth = 0;
+                        let inStr = false;
+                        let esc = false;
+                        for (let i = bracketStart; i < slice.length; i++) {
+                            const c = slice[i];
+                            if (esc) { esc = false; continue; }
+                            if (c === '\\' && inStr) { esc = true; continue; }
+                            if (c === '"') { inStr = !inStr; continue; }
+                            if (!inStr) {
+                                if (c === '[') bDepth++;
+                                else if (c === ']') {
+                                    bDepth--;
+                                    if (bDepth === 0) {
+                                        slice = slice.slice(0, i + 1);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Re-insert missing `{` after `"summary":` and missing `}` before `, "items":`
+            let repaired = slice.replace(/("summary"\s*:\s*)(?!\{)/, '$1{ ');
+            repaired = repaired.replace(/(\s*,\s*"items"\s*:)/, ' }$1');
+
+            // Re-insert `{` and `}` around each item inside `"items": [ ... ]`
+            const itemsKeyMatch = repaired.match(/"items"\s*:\s*\[/);
+            if (itemsKeyMatch) {
+                const arrayStart = itemsKeyMatch.index + itemsKeyMatch[0].length;
+                let bDepth = 1;
+                let inStr = false;
+                let esc = false;
+                let arrayEnd = -1;
+
+                for (let i = arrayStart; i < repaired.length; i++) {
+                    const c = repaired[i];
+                    if (esc) { esc = false; continue; }
+                    if (c === '\\' && inStr) { esc = true; continue; }
+                    if (c === '"') { inStr = !inStr; continue; }
+                    if (!inStr) {
+                        if (c === '[') bDepth++;
+                        else if (c === ']') {
+                            bDepth--;
+                            if (bDepth === 0) {
+                                arrayEnd = i;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (arrayEnd !== -1) {
+                    let itemsInner = repaired.slice(arrayStart, arrayEnd);
+                    // Only wrap items if they don't already start with `{`
+                    if (!/^\s*\{/.test(itemsInner) && itemsInner.trim().length > 0) {
+                        // Each item begins with `"label":` and ends right after `"bbox": [ ... ]`
+                        itemsInner = itemsInner.replace(/("label"\s*:)/g, '{ $1');
+                        itemsInner = itemsInner.replace(/("bbox"\s*:\s*\[[^\]]*\])/g, '$1 }');
+                        repaired = repaired.slice(0, arrayStart) + itemsInner + repaired.slice(arrayEnd);
+                    }
+                }
+            }
+
+            // Wrap outer root object if needed
+            repaired = repaired.trim().replace(/,\s*$/, '');
+            if (!repaired.startsWith('{')) repaired = '{ ' + repaired;
+            if (!repaired.endsWith('}')) repaired = repaired + ' }';
+
+            try {
+                const parsed = JSON.parse(repaired);
+                if (parsed && parsed.summary && typeof parsed.summary.caption === 'string') {
+                    return parsed;
+                }
+            } catch (e) {
+                return null;
+            }
+            return null;
+        };
+
+        window.parsePngChunksAndMetadata = async function(arrayBuffer) {
+            const view = new DataView(arrayBuffer);
+            const bytes = new Uint8Array(arrayBuffer);
+
+            // Verify PNG signature (89 50 4E 47 0D 0A 1A 0A)
+            if (bytes.length < 24 || bytes[0] !== 0x89 || bytes[1] !== 0x50 || bytes[2] !== 0x4E || bytes[3] !== 0x47) {
+                throw new Error("The selected file is not a valid PNG image.");
+            }
+
+            let width = null;
+            let height = null;
+            const textChunks = [];
+            const latin1Decoder = new TextDecoder('latin1');
+
+            let offset = 8;
+            while (offset + 8 <= bytes.length) {
+                const length = view.getUint32(offset, false);
+                const type = latin1Decoder.decode(bytes.subarray(offset + 4, offset + 8));
+                const dataStart = offset + 8;
+                const dataEnd = dataStart + length;
+
+                if (dataEnd > bytes.length) break;
+
+                if (type === 'IHDR' && length >= 8) {
+                    width = view.getUint32(dataStart, false);
+                    height = view.getUint32(dataStart + 4, false);
+                } else if (type === 'tEXt') {
+                    const chunkBytes = bytes.subarray(dataStart, dataEnd);
+                    const nullIdx = chunkBytes.indexOf(0);
+                    if (nullIdx !== -1) {
+                        const valueStr = window.decodePngChunkBytes(chunkBytes.subarray(nullIdx + 1));
+                        textChunks.push(valueStr);
+                    }
+                } else if (type === 'iTXt') {
+                    const chunkBytes = bytes.subarray(dataStart, dataEnd);
+                    const nullIdx = chunkBytes.indexOf(0);
+                    if (nullIdx !== -1 && nullIdx + 3 < chunkBytes.length) {
+                        const compressionFlag = chunkBytes[nullIdx + 1];
+                        let cursor = nullIdx + 3;
+                        const langNull = chunkBytes.indexOf(0, cursor);
+                        if (langNull !== -1) {
+                            cursor = langNull + 1;
+                            const transNull = chunkBytes.indexOf(0, cursor);
+                            if (transNull !== -1) {
+                                cursor = transNull + 1;
+                                const payloadBytes = chunkBytes.subarray(cursor);
+                                if (compressionFlag === 0) {
+                                    textChunks.push(window.decodePngChunkBytes(payloadBytes));
+                                } else if (compressionFlag === 1 && typeof DecompressionStream !== 'undefined') {
+                                    try {
+                                        const ds = new DecompressionStream('deflate');
+                                        const writer = ds.writable.getWriter();
+                                        writer.write(payloadBytes);
+                                        writer.close();
+                                        const decompressedBuf = await new Response(ds.readable).arrayBuffer();
+                                        textChunks.push(window.decodePngChunkBytes(new Uint8Array(decompressedBuf)));
+                                    } catch (e) {}
+                                }
+                            }
+                        }
+                    }
+                } else if (type === 'zTXt' && typeof DecompressionStream !== 'undefined') {
+                    const chunkBytes = bytes.subarray(dataStart, dataEnd);
+                    const nullIdx = chunkBytes.indexOf(0);
+                    if (nullIdx !== -1 && nullIdx + 2 < chunkBytes.length) {
+                        const compressedBytes = chunkBytes.subarray(nullIdx + 2);
+                        try {
+                            const ds = new DecompressionStream('deflate');
+                            const writer = ds.writable.getWriter();
+                            writer.write(compressedBytes);
+                            writer.close();
+                            const decompressedBuf = await new Response(ds.readable).arrayBuffer();
+                            textChunks.push(window.decodePngChunkBytes(new Uint8Array(decompressedBuf)));
+                        } catch (e) {}
+                    }
+                } else if (type === 'eXIf') {
+                    const chunkBytes = bytes.subarray(dataStart, dataEnd);
+                    const exifStrings = window.extractExifStrings(chunkBytes);
+                    for (const str of exifStrings) {
+                        if (str) textChunks.push(str);
+                    }
+                } else if (type === 'IEND') {
+                    break;
+                }
+
+                offset = dataEnd + 4; // Skip 4-byte CRC
+            }
+
+            let extractedJson = null;
+            for (const chunkText of textChunks) {
+                extractedJson = window.extractMossJsonFromText(chunkText);
+                if (extractedJson) break;
+            }
+
+            return { width, height, extractedJson };
+        };
+
+        window.handleImportPngUpload = async function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const statusEl = document.getElementById('importPngStatus');
+            const errEl = document.getElementById('importError');
+            if (statusEl) {
+                statusEl.classList.add('hidden');
+                statusEl.textContent = '';
+            }
+            if (errEl) {
+                errEl.classList.add('hidden');
+            }
+
+            try {
+                const buffer = await file.arrayBuffer();
+                const { width, height, extractedJson } = await window.parsePngChunksAndMetadata(buffer);
+
+                if (width && height) {
+                    const wEl = document.getElementById('importCanvasWidth');
+                    const hEl = document.getElementById('importCanvasHeight');
+                    if (wEl) wEl.value = Math.max(128, Math.min(4096, Math.round(width / 16) * 16));
+                    if (hEl) hEl.value = Math.max(128, Math.min(4096, Math.round(height / 16) * 16));
+                }
+
+                // Prepare DataURL in case user wants to load the PNG as Reference Background Image
+                const reader = new FileReader();
+                reader.onload = function(loadEvent) {
+                    pendingPngRefDataUrl = loadEvent.target.result;
+                };
+                reader.readAsDataURL(file);
+
+                if (!extractedJson) {
+                    if (errEl) {
+                        errEl.innerText = "No embedded MOSS-Image JSON layout ('{\"summary\": {\"caption\": ...}}') was found in this PNG's metadata.";
+                        errEl.classList.remove('hidden');
+                    }
+                    return;
+                }
+
+                const jsonInputEl = document.getElementById('importJsonInput');
+                if (jsonInputEl) {
+                    jsonInputEl.value = extractedJson;
+                }
+
+                if (statusEl) {
+                    statusEl.textContent = `✓ Extracted MOSS-Image layout (${width} × ${height} px) from "${file.name}". Click "Import & Render" below to apply.`;
+                    statusEl.classList.remove('hidden');
+                }
+            } catch (err) {
+                if (errEl) {
+                    errEl.innerText = err.message || "Failed to read PNG metadata.";
+                    errEl.classList.remove('hidden');
+                }
+            }
         };
 
         // Utility Functions
@@ -2131,6 +2756,16 @@
         };
 
         window.openImportModal = function() {
+            pendingPngRefDataUrl = null;
+            const statusEl = document.getElementById('importPngStatus');
+            const errEl = document.getElementById('importError');
+            if (statusEl) {
+                statusEl.classList.add('hidden');
+                statusEl.textContent = '';
+            }
+            if (errEl) {
+                errEl.classList.add('hidden');
+            }
             document.getElementById('importCanvasWidth').value = canvasState.width || 1024;
             document.getElementById('importCanvasHeight').value = canvasState.height || 1024;
             document.getElementById('importModal').classList.remove('hidden');
@@ -2148,7 +2783,13 @@
             errEl.classList.add('hidden');
 
             try {
-                const parsed = JSON.parse(raw);
+                let parsed;
+                try {
+                    parsed = JSON.parse(raw);
+                } catch (standardParseErr) {
+                    parsed = window.reconstructBraceStrippedMossJson(raw);
+                    if (!parsed) throw standardParseErr;
+                }
                 window.pushState();
 
                 let importedW = parseInt(document.getElementById('importCanvasWidth').value);
@@ -2228,6 +2869,14 @@
                         xmax: Array.isArray(item.bbox) ? item.bbox[3] : 250
                     }));
                 }
+
+                // Optionally apply imported PNG as Reference Background Image
+                const loadAsRef = document.getElementById('importPngAsRefCheckbox')?.checked;
+                if (pendingPngRefDataUrl && loadAsRef) {
+                    window.applyReferenceImageDataUrl(pendingPngRefDataUrl);
+                    pendingPngRefDataUrl = null;
+                }
+
                 window.renderAll();
                 window.closeImportModal();
                 if (canvasState.boxes.length > 0) window.switchTab(2);
