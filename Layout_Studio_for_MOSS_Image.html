@@ -50,6 +50,12 @@
                 height: 100% !important;
             }
         }
+        @media (max-width: 1499px) {
+            #centerHeaderControls,
+            #rightActionControls {
+                flex-direction: column;
+            }
+        }
 
         /* Functional 16x16 grid background */
         .bg-grid-pattern {
@@ -142,14 +148,14 @@
             <div>
                 <h1 class="text-sm font-bold text-white tracking-wide flex items-center gap-2">
                     The Layout Studio for MOSS-Image
-                    <span class="text-[0.625rem] px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-semibold">v1.1.0</span><span class="text-[0.625rem]">by ℝ𝕖𝕩𝕠</span>
+                    <span class="text-[0.625rem] px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-semibold">v1.1.1</span><span class="text-[0.625rem]">by ℝ𝕖𝕩𝕠</span>
                 </h1>
                 <p class="text-xs text-slate-400">Visual bounding box constructor for <a href="https://github.com/OpenMOSS/MOSS-Image/tree/main" target="_blank" rel="noopener noreferrer" class="text-amber-400 underline hover:text-amber-300">MOSS-Image</a></p>
             </div>
         </div>
 
         <!-- Center: Add Bounding Box & Reference Image Controls -->
-        <div class="flex items-center gap-2">
+        <div id="centerHeaderControls" class="flex items-center gap-2">
             <!-- Add Bounding Box Dropdown Button -->
             <div class="relative flex items-center">
                 <button id="addBoxDropdownBtn" onclick="toggleAddBoxMenu()" title="Add a Text, Object, or Character Item" class="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg transition shadow-md shadow-indigo-600/20 flex items-center gap-1.5">
@@ -176,51 +182,55 @@
         </div>
 
         <!-- Right: Action Controls -->
-        <div class="flex items-center gap-2.5 flex-wrap justify-center">
-            <!-- Undo and Redo Icon Buttons -->
-            <div class="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800">
-                <button id="undoBtn" onclick="undo()" disabled class="p-1.5 text-xs font-medium text-slate-400 hover:text-white disabled:opacity-30 disabled:hover:text-slate-400 rounded-md transition hover:bg-slate-800" title="Undo (Ctrl+Z)">
-                    <i data-lucide="undo-2" class="w-4 h-4"></i>
+        <div id="rightActionControls" class="flex items-center gap-2.5 flex-wrap justify-center">
+            <div class="flex items-center gap-2.5">
+                <!-- Undo and Redo Icon Buttons -->
+                <div class="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800">
+                    <button id="undoBtn" onclick="undo()" disabled class="p-1.5 text-xs font-medium text-slate-400 hover:text-white disabled:opacity-30 disabled:hover:text-slate-400 rounded-md transition hover:bg-slate-800" title="Undo (Ctrl+Z)">
+                        <i data-lucide="undo-2" class="w-4 h-4"></i>
+                    </button>
+                    <button id="redoBtn" onclick="redo()" disabled class="p-1.5 text-xs font-medium text-slate-400 hover:text-white disabled:opacity-30 disabled:hover:text-slate-400 rounded-md transition hover:bg-slate-800" title="Redo (Ctrl+Y)">
+                        <i data-lucide="redo-2" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <!-- Snap to Grid Toggle -->
+                <button id="snapGridBtn" onclick="toggleSnapToGrid()" class="px-3 py-2 text-xs font-medium text-indigo-300 bg-indigo-950/60 hover:bg-indigo-900/60 border border-indigo-700/60 rounded-lg transition flex items-center gap-1.5" title="Toggle 16px Grid Snapping">
+                    <i data-lucide="grid" class="w-3.5 h-3.5 text-indigo-400"></i> Snap Grid: <span id="snapGridLabel">ON</span>
                 </button>
-                <button id="redoBtn" onclick="redo()" disabled class="p-1.5 text-xs font-medium text-slate-400 hover:text-white disabled:opacity-30 disabled:hover:text-slate-400 rounded-md transition hover:bg-slate-800" title="Redo (Ctrl+Y)">
-                    <i data-lucide="redo-2" class="w-4 h-4"></i>
-                </button>
-            </div>
 
-            <!-- Snap to Grid Toggle -->
-            <button id="snapGridBtn" onclick="toggleSnapToGrid()" class="px-3 py-2 text-xs font-medium text-indigo-300 bg-indigo-950/60 hover:bg-indigo-900/60 border border-indigo-700/60 rounded-lg transition flex items-center gap-1.5" title="Toggle 16px Grid Snapping">
-                <i data-lucide="grid" class="w-3.5 h-3.5 text-indigo-400"></i> Snap Grid: <span id="snapGridLabel">ON</span>
-            </button>
-
-            <!-- Reset Button -->
-            <button id="resetBtn" onclick="resetAll()" title="Reset the Studio settings to default" class="px-3 py-2 text-xs font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition border border-slate-700 flex items-center gap-1.5">
-                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Reset
-            </button>
-
-            <!-- Import JSON Button -->
-            <button id="openImportModalBtn" onclick="openImportModal()" class="px-3 py-2 text-xs font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition border border-slate-700 flex items-center gap-1.5">
-                <i data-lucide="file-input" class="w-3.5 h-3.5"></i> Import JSON
-            </button>
-
-            <!-- Export Button -->
-            <button id="openExportModalBtn" onclick="openExportModal()" class="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg transition shadow-md shadow-indigo-600/20 flex items-center gap-1.5">
-                <i data-lucide="download" class="w-4 h-4"></i> Export
-            </button>
-
-            <!-- Text Zoom A- / A+ Controls -->
-            <div class="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800">
-                <button id="zoomOutTextBtn" onclick="zoomTextOut()" disabled class="px-2 py-1 text-xs font-bold text-slate-400 hover:text-white disabled:opacity-30 disabled:hover:text-slate-400 rounded transition hover:bg-slate-800" title="Decrease Text Size">
-                    A<sup>-</sup>
-                </button>
-                <button id="zoomInTextBtn" onclick="zoomTextIn()" class="px-2 py-1 text-xs font-bold text-slate-400 hover:text-white rounded transition hover:bg-slate-800" title="Increase Text Size">
-                    A<sup>+</sup>
+                <!-- Reset Button -->
+                <button id="resetBtn" onclick="resetAll()" title="Reset the Studio settings to default" class="px-3 py-2 text-xs font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition border border-slate-700 flex items-center gap-1.5">
+                    <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Reset
                 </button>
             </div>
 
-            <!-- Help Button -->
-            <button onclick="openHelpModal()" class="p-2 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition border border-slate-700 flex items-center justify-center" title="Keyboard Shortcuts & Help">
-                <i data-lucide="help-circle" class="w-4 h-4"></i>
-            </button>
+            <div class="flex items-center gap-2.5">
+                <!-- Import JSON Button -->
+                <button id="openImportModalBtn" onclick="openImportModal()" class="px-3 py-2 text-xs font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition border border-slate-700 flex items-center gap-1.5">
+                    <i data-lucide="file-input" class="w-3.5 h-3.5"></i> Import JSON
+                </button>
+
+                <!-- Export Button -->
+                <button id="openExportModalBtn" onclick="openExportModal()" class="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg transition shadow-md shadow-indigo-600/20 flex items-center gap-1.5">
+                    <i data-lucide="download" class="w-4 h-4"></i> Export
+                </button>
+
+                <!-- Text Zoom A- / A+ Controls -->
+                <div class="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800">
+                    <button id="zoomOutTextBtn" onclick="zoomTextOut()" disabled class="px-2 py-1 text-xs font-bold text-slate-400 hover:text-white disabled:opacity-30 disabled:hover:text-slate-400 rounded transition hover:bg-slate-800" title="Decrease Text Size">
+                        A<sup>-</sup>
+                    </button>
+                    <button id="zoomInTextBtn" onclick="zoomTextIn()" class="px-2 py-1 text-xs font-bold text-slate-400 hover:text-white rounded transition hover:bg-slate-800" title="Increase Text Size">
+                        A<sup>+</sup>
+                    </button>
+                </div>
+
+                <!-- Help Button -->
+                <button onclick="openHelpModal()" class="p-2 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition border border-slate-700 flex items-center justify-center" title="Keyboard Shortcuts & Help">
+                    <i data-lucide="help-circle" class="w-4 h-4"></i>
+                </button>
+          </div>
         </div>
     </header>
 
@@ -1608,7 +1618,7 @@
         // Presets & Dimensions Calculation Engine
         window.getPresetDimensions = function(aspect, mpVal) {
             let baseKey = aspect;
-            let isReversed = false;
+            let isReversed = false; //[cite: 1]
 
             if (aspect === '3:2') { baseKey = '2:3'; isReversed = true; }
             else if (aspect === '4:3') { baseKey = '3:4'; isReversed = true; }
@@ -1765,6 +1775,7 @@
             }
 
             undoStack.push(currentStateStr);
+            canvasState = JSON.parse(currentStateStr); // Fix: Ensure state reference stability after push
             redoStack = []; // Reset redo stack on new user action
             window.updateUndoRedoUI();
             window.saveStateToLocalStorage();
@@ -2311,7 +2322,23 @@
                 currentPresetCat = match.category;
                 currentAspect = match.aspect;
                 currentMp = match.mp;
-                window.handlePresetCatChange(match.category);
+                const catRadio = document.querySelector(`input[name="presetCat"][value="${match.category}"]`);
+                if (catRadio) catRadio.checked = true;
+
+                window.renderAspectGrid();
+                const res = window.getPresetDimensions(currentAspect, currentMp);
+                const widthEl = document.getElementById('canvasWidth');
+                const heightEl = document.getElementById('canvasHeight');
+                const actualMpEl = document.getElementById('actualMpLabel');
+                const targetMpSelect = document.getElementById('targetMpSelect');
+
+                if (widthEl) widthEl.value = res.width;
+                if (heightEl) heightEl.value = res.height;
+                if (actualMpEl) actualMpEl.innerText = `${res.mp} MP`;
+                if (targetMpSelect) targetMpSelect.value = currentMp;
+
+                canvasState.width = res.width;
+                canvasState.height = res.height;
                 window.handleSizeModeChange('presets');
             } else {
                 window.handleSizeModeChange('custom');
@@ -2597,10 +2624,17 @@
 
         // Output Copy Functions & Toast Alerts
         window.copyJSON = function() {
-            const jsonText = document.getElementById('jsonOutput').textContent;
-            navigator.clipboard.writeText(jsonText).then(() => {
-                window.showToast("JSON schema copied to clipboard!");
-            });
+            const isComfyMode = new URLSearchParams(window.location.search).has("comfy");
+            if (!isComfyMode) {
+                const jsonText = document.getElementById('jsonOutput').textContent;
+                navigator.clipboard.writeText(jsonText).then(() => {
+                    window.showToast("JSON schema copied to clipboard!");
+                });
+                window.closeExportModal();
+            } else if (typeof window.sendToComfyUI === 'function') {
+                window.sendToComfyUI();
+                window.showToast("Layout sent to ComfyUI node!");
+            }
         };
 
         window.copyNaturalLanguage = function() {
@@ -2633,6 +2667,7 @@
             const textOutput = paragraphs.join('\n\n');
             navigator.clipboard.writeText(textOutput).then(() => {
                 window.showToast("Text prompt copied to clipboard successfully!");
+                window.closeExportModal();
             });
         };
 
@@ -2888,11 +2923,30 @@
             }
         };
 
-        // Keyboard Shortcuts Handler
+        // ==========================================
+        // Robust Scoped Keyboard Shortcuts Handler
+        // ==========================================
         window.addEventListener('keydown', function(e) {
-            const isTyping = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName);
+            const appBody = document.getElementById('appBody');
+
+            // Check if the focus is currently inside our Layout Studio app container or modals
+            const activeEl = document.activeElement;
+            const isInsideStudio = appBody && appBody.contains(activeEl);
+            const isModalOpen = !document.getElementById('helpModal').classList.contains('hidden') ||
+                                !document.getElementById('exportModal').classList.contains('hidden') ||
+                                !document.getElementById('importModal').classList.contains('hidden') ||
+                                !document.getElementById('resetModal').classList.contains('hidden') ||
+                                !document.getElementById('clearCacheModal').classList.contains('hidden');
+
+            // If focus is elsewhere in ComfyUI and no internal modal is open, ignore completely
+            if (!isInsideStudio && !isModalOpen) {
+                return;
+            }
+
+            const isTyping = ['INPUT', 'TEXTAREA', 'SELECT'].includes(activeEl?.tagName);
 
             if (e.key === 'Escape') {
+                // Allow modals to close naturally
                 window.closeImportModal();
                 window.closeExportModal();
                 window.closeResetModal();
@@ -3101,6 +3155,56 @@
 
             window.initIcons();
         };
+
+        // ComfyUI Integration Engine
+        const isComfyMode = new URLSearchParams(window.location.search).has("comfy");
+
+        function importLayoutFromJSON(jsonString) {
+            const jsonInputEl = document.getElementById('importJsonInput');
+            if (jsonInputEl) {
+                jsonInputEl.value = jsonString;
+                window.executeImportJSON();
+            }
+        }
+
+        function exportLayoutToJSON() {
+            window.updateJSON();
+            const jsonEl = document.getElementById('jsonOutput');
+            return jsonEl ? jsonEl.textContent : '';
+        }
+
+        if (isComfyMode) {
+        // 1. Receive saved JSON when ComfyUI opens the Studio popup
+        window.addEventListener("message", (event) => {
+            // Optional security/source check to ensure messages are meant for your app
+            if (!event.data || event.data.type !== "LOAD_MOSS_JSON") return;
+
+            try {
+                importLayoutFromJSON(event.data.payload);
+            } catch (e) {
+                console.warn("Starting fresh layout in ComfyUI");
+            }
+        });
+
+        // 2. Send layout back to ComfyUI node prompt field (KEEP THIS)
+        window.sendToComfyUI = function () {
+            const jsonString = exportLayoutToJSON();
+            window.parent.postMessage(
+                { type: "SAVE_MOSS_JSON", payload: jsonString },
+                "*"
+            );
+        };
+
+        // 3. Dynamically update Export button label for ComfyUI mode (KEEP THIS)
+        window.addEventListener("DOMContentLoaded", () => {
+            const copyJsonBtn = document.querySelector('button[onclick="copyJSON()"]');
+            if (copyJsonBtn) {
+                copyJsonBtn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5"></i> Apply to ComfyUI';
+                copyJsonBtn.title = 'Apply layout back to ComfyUI node prompt';
+                window.initIcons();
+            }
+        });
+    }
     </script>
 </body>
 </html>
