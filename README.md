@@ -2,6 +2,8 @@
 
 Take the guesswork out of creating bounding-box layouts for [MOSS-Image](https://github.com/OpenMOSS/MOSS-Image/tree/main) with this free, open-source, browser-based, cross-platform, locally hosted (and therefore *private!*) visual spatial-precision layout editor designed specifically to generate reliable JSON bbox prompts for MOSS-Image for use with any AI-image generator.
 
+NOTE: This is the original standalone web app. For the custom node for ComfyUI version, [click here](https://github.com/Rexoplanets/layout-studio-moss-image-comfy-node).
+
 <p align="center">
   <img src="./assets/images/layout-studio-items-tab-hero.webp" width="800" alt="The Layout Studio for MOSS-Image"><br>
   <em>The Layout Studio for MOSS-Image</em>
@@ -261,6 +263,12 @@ If you find this tool useful, feel free to toss me some Buzz on Civitai: [Civita
 ---
 
 ## Changelog
+
+### Version 1.1.1
+
+*22 November 2026*
+
+- Minor tweaks.
 
 ### Version 1.1.0
 
